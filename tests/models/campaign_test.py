@@ -16,11 +16,10 @@ class CampaignTest(Base):
         adv['AttributionImpressionLookbackWindowInSeconds'] = 3600
         adv['ClickDedupWindowInSeconds'] = 7
         adv['ConversionDedupWindowInSeconds'] = 60
-        adv['DefaultRightMediaOfferTypeId'] = 1 # Adult
-        adv['IndustryCategoryId'] = 54 # Entertainment
+        adv['DefaultRightMediaOfferTypeId'] = 1  # Adult
+        adv['IndustryCategoryId'] = 54  # Entertainment
         adv['PartnerId'] = '73qiy5s'
         adv.create()
-        
 
         campaign = Campaign(CampaignTest.conn)
         campaign['AdvertiserId'] = adv.get('AdvertiserId')
@@ -29,7 +28,7 @@ class CampaignTest(Base):
         campaign['StartDate'] = '2015-02-01'
         campaign['CampaignConversionReportingColumns'] = []
         result = campaign.create()
-        
+
         assert campaign.get('CampaignId') is not None
 
     def testGet(self):

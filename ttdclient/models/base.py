@@ -65,7 +65,7 @@ class Base(dict):
         headers = Base.connection.get_authorization()
 
         headers['Content-Type'] = 'application/json'
-        
+
         if method == "GET":
             print "curl -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{1}'".format(headers['TTD-Auth'], url)
             return requests.get(url, headers=headers)
