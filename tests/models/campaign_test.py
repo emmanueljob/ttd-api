@@ -9,7 +9,8 @@ from tests.base import Base
 class CampaignTest(Base):
 
     def testCreate(self):
-
+        
+        # Create an advertiser first.
         adv = Advertiser(CampaignTest.conn)
         adv['AdvertiserName'] = 'test'
         adv['AttributionClickLookbackWindowInSeconds'] = 3600
@@ -31,8 +32,7 @@ class CampaignTest(Base):
 
         assert campaign.get('CampaignId') is not None
 
-    def testGet(self):
         loader = Campaign(CampaignTest.conn)
-        campaign = loader.find('j4ou3aws')
+        campaign = loader.find(campaign.get('CampaignId'))
         print campaign
-        assert campaign.get('CampaignName') == 'test'
+        assert campaign.get('CampaignName') == 'test campaign'

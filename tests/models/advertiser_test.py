@@ -21,7 +21,6 @@ class AdvertiserTest(Base):
 
         assert adv.get('AdvertiserId') is not None
 
-    def testGet(self):
         loader = Advertiser(AdvertiserTest.conn)
-        adv = loader.find('0l7hloj')
+        adv = loader.find(adv.get('AdvertiserId'))
         assert adv.get('AdvertiserName') == 'test'
