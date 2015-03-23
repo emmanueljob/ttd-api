@@ -87,7 +87,7 @@ class Base(dict):
             results = obj.get('Result')
             for result in results:
                 new_obj = self.__class__(Base.connection)
-                new_obj.import_props(obj)
+                new_obj.import_props(result)
                 rval.append(new_obj)
         else:
             raise Exception("Bad response code")
@@ -101,7 +101,6 @@ class Base(dict):
             new_obj = self.__class__(Base.connection)
             new_obj.import_props(obj)
         else:
-            print "RESULT:"
             print response.text
             raise Exception("Bad response code")
 
