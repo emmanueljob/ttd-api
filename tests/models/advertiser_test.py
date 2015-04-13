@@ -7,6 +7,14 @@ from tests.base import Base
 
 class AdvertiserTest(Base):
 
+    def testGetByPartner(self):
+        adv = Advertiser(AdvertiserTest.conn)
+        partner_id = '73qiy5s'
+        advs = adv.find_by_partner(partner_id)
+        for result in advs:
+            print result.get('AdvertiserId')
+        
+
     def testCreate(self):
         adv = Advertiser(AdvertiserTest.conn)
         adv['AdvertiserName'] = 'test'

@@ -97,11 +97,10 @@ class Base(dict):
     def _get_response_object(self, response):
         obj = json.loads(response.text)
         new_obj = None
-        if obj:
+        if obj and response.status_code == 200:
             new_obj = self.__class__(Base.connection)
             new_obj.import_props(obj)
         else:
-            print response.text
             raise Exception("Bad response code")
 
         return new_obj
