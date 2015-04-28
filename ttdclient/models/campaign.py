@@ -16,3 +16,15 @@ class Campaign(Base):
         
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
+
+
+    def get_by_name(self, advertiser_id, name):
+        payload = { "AdvertiserId": advertiser_id,
+                    "SearchTerms": [name],
+                    "PageStartIndex": 0,
+                    "PageSize": 100 }
+        method = "POST"
+        url = '{0}/{1}'.format(self.get_url(), 'query/advertiser')
+        
+        response = self._execute(method, url, json.dumps(payload))
+        return self._get_response_objects(response)

@@ -94,3 +94,9 @@ class AdGroupTest(Base):
         ad_groups = ad_group.get_by_campaign(campaign.get('CampaignId'))
         for test_group in ad_groups:
             assert test_group.get('id') == ad_group.get('id')
+            # assert test_group.get('RTBAttributes', {}).get('ContractAdustments', {}).get('Adjustment', 0) == 1.0
+
+
+        ad_groups = ad_group.get_by_name(campaign.get('CampaignId'), 'ad group test')
+        for test_group in ad_groups:
+            assert test_group.get('AdGroupName') == 'ad group test'

@@ -67,3 +67,8 @@ class CampaignTest(Base):
         campaigns = campaign.get_by_advertiser(adv.get('AdvertiserId'))
         for test_campaign in campaigns:
             assert test_campaign.get('CampaignId') == campaign.get('CampaignId')
+
+
+        campaigns = campaign.get_by_name(test_campaign.get('AdvertiserId'), 'test campaign')
+        for test_campaign in campaigns:
+            assert test_campaign.get('CampaignName') == 'test campaign'

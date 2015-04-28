@@ -13,6 +13,15 @@ class AdvertiserTest(Base):
         advs = adv.find_by_partner(partner_id)
         for result in advs:
             print result.get('AdvertiserId')
+
+
+    def testGetByName(self):
+        adv = Advertiser(AdvertiserTest.conn)
+        partner_id = '73qiy5s'
+        advs = adv.find_by_name(partner_id, 'test')
+        for result in advs:
+            print result.get('AdvertiserName')
+            assert result.get('AdvertiserName') == 'test'
         
 
     def testCreate(self):
