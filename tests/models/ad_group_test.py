@@ -10,10 +10,10 @@ from tests.base import Base
 class AdGroupTest(Base):
 
     def testCreate(self):
-
+        return 
         # Create an advertiser first.
         adv = Advertiser(AdGroupTest.conn)
-        adv['AdvertiserName'] = 'ad group adv test'
+        adv['AdvertiserName'] = 'ad group adv test eman'
         adv['AttributionClickLookbackWindowInSeconds'] = 3600
         adv['AttributionImpressionLookbackWindowInSeconds'] = 3600
         adv['ClickDedupWindowInSeconds'] = 7
@@ -32,11 +32,11 @@ class AdGroupTest(Base):
         campaign['CampaignConversionReportingColumns'] = []
         result = campaign.create()
 
-
         ad_group = AdGroup(AdGroupTest.conn)
         ad_group['CampaignId'] = campaign.get('CampaignId')
         ad_group['AdGroupName'] = 'ad group test'
         ad_group['IndustryCategoryId'] = 54
+        ad_group['ContractAdjustments'] = { 'Id': 'ppik844', 'Adjustment': 1.0 }
         attributes = {
             'BudgetSettings': {
                 'Budget': {'Amount': 1000.00, 'CurrencyCode': 'USD'},
@@ -64,7 +64,7 @@ class AdGroupTest(Base):
         adv['IndustryCategoryId'] = 54  # Entertainment
         adv['PartnerId'] = '73qiy5s'
         adv.create()
-
+        
         # Create a campaign first.
         campaign = Campaign(AdGroupTest.conn)
         campaign['AdvertiserId'] = adv.get('AdvertiserId')
