@@ -85,14 +85,16 @@ class AdGroupTest(Base):
                 'PacingEnabled': True
                 },
             'BaseBidCPM': {'Amount': 1.00, 'CurrencyCode': 'USD'},
-            'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'}
+            'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'},
+            'ContractAdjustments': { 'Id': 'ppik844', 'Adjustment': 1.0 }
         }
-
+        
         ad_group['RTBAttributes'] = attributes
         ad_group.create()
 
         ad_groups = ad_group.get_by_campaign(campaign.get('CampaignId'))
         for test_group in ad_groups:
+            print test_group
             assert test_group.get('id') == ad_group.get('id')
             # assert test_group.get('RTBAttributes', {}).get('ContractAdustments', {}).get('Adjustment', 0) == 1.0
 
