@@ -1,16 +1,17 @@
 import unittest
 import json
+import time
 
 from ttdclient.models.ad_group import AdGroup
 from ttdclient.models.advertiser import Advertiser
 from ttdclient.models.campaign import Campaign
+from ttdclient.models.contract import Contract
 from tests.base import Base
 
 
 class AdGroupTest(Base):
 
     def testCreate(self):
-        return 
         # Create an advertiser first.
         adv = Advertiser(AdGroupTest.conn)
         adv['AdvertiserName'] = 'ad group adv test eman'
@@ -32,11 +33,31 @@ class AdGroupTest(Base):
         campaign['CampaignConversionReportingColumns'] = []
         result = campaign.create()
 
+        # Create an advertiser first.
+        contract = Contract(AdGroupTest.conn)
+        contract['Name'] = 'Contract Test'
+        contract['OwnerPartnerId'] = '73qiy5s'
+        contract["StartDateUtc"] = "2015-04-30T21:21:19.7668268"
+        
+        code = int(time.time())
+        
+        deals = [{
+                "SupplyVendorId": 7, # AppNexus
+                "SupplyVendorDealCode": str(code), # AppNexus
+                "FloorPriceCPM": {
+                    "CurrencyCode": "USD",
+                    "Amount": 1.0
+                    }
+                }]
+        contract['Deals'] = deals
+    
+        contract.create()
+
         ad_group = AdGroup(AdGroupTest.conn)
         ad_group['CampaignId'] = campaign.get('CampaignId')
         ad_group['AdGroupName'] = 'ad group test'
         ad_group['IndustryCategoryId'] = 54
-        ad_group['ContractAdjustments'] = { 'Id': 'ppik844', 'Adjustment': 1.0 }
+        ad_group
         attributes = {
             'BudgetSettings': {
                 'Budget': {'Amount': 1000.00, 'CurrencyCode': 'USD'},
@@ -44,7 +65,11 @@ class AdGroupTest(Base):
                 'PacingEnabled': True
                 },
             'BaseBidCPM': {'Amount': 1.00, 'CurrencyCode': 'USD'},
-            'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'}
+            'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'},
+            'ContractTargeting': { 
+                'InventoryTargetingType': 'BothMarkets',
+                'ContractIds': [contract.get('ContractId')]
+                }
         }
 
         ad_group['RTBAttributes'] = attributes
@@ -74,6 +99,26 @@ class AdGroupTest(Base):
         campaign['CampaignConversionReportingColumns'] = []
         result = campaign.create()
 
+        # Create an advertiser first.
+        contract = Contract(AdGroupTest.conn)
+        contract['Name'] = 'Contract Test'
+        contract['OwnerPartnerId'] = '73qiy5s'
+        contract["StartDateUtc"] = "2015-04-30T21:21:19.7668268"
+        
+        code = int(time.time())
+        
+        deals = [{
+                "SupplyVendorId": 7, # AppNexus
+                "SupplyVendorDealCode": str(code), # AppNexus
+                "FloorPriceCPM": {
+                    "CurrencyCode": "USD",
+                    "Amount": 1.0
+                    }
+                }]
+        contract['Deals'] = deals
+    
+        contract.create()
+
         ad_group = AdGroup(AdGroupTest.conn)
         ad_group['CampaignId'] = campaign.get('CampaignId')
         ad_group['AdGroupName'] = 'ad group test'
@@ -86,7 +131,10 @@ class AdGroupTest(Base):
                 },
             'BaseBidCPM': {'Amount': 1.00, 'CurrencyCode': 'USD'},
             'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'},
-            'ContractAdjustments': { 'Id': 'ppik844', 'Adjustment': 1.0 }
+            'ContractTargeting': { 
+                'InventoryTargetingType': 'BothMarkets',
+                'ContractIds': [contract.get('ContractId')] 
+                }
         }
         
         ad_group['RTBAttributes'] = attributes
@@ -94,9 +142,7 @@ class AdGroupTest(Base):
 
         ad_groups = ad_group.get_by_campaign(campaign.get('CampaignId'))
         for test_group in ad_groups:
-            print test_group
             assert test_group.get('id') == ad_group.get('id')
-            # assert test_group.get('RTBAttributes', {}).get('ContractAdustments', {}).get('Adjustment', 0) == 1.0
 
 
         ad_groups = ad_group.get_by_name(campaign.get('CampaignId'), 'ad group test')
