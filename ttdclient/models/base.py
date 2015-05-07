@@ -42,21 +42,25 @@ class Base(dict):
         if id in self:
             del self['id']
 
+        print "CREATING"
         response = self._execute("POST", self.get_create_url(), json.dumps(self.export_props()))
         obj = self._get_response_object(response)
         self.import_props(obj)
 
+        return self.getId()
+
+    def getId(self):
         return self.get('id')
 
     def save(self):
-        if self.get('id') is None or self.get('id') == 0:
+        if self.getId() is None or self.getId() == 0:
             raise Exception("cant update an object with no id")
 
-        response = self._execute("PUT", self.get_find_url(self.get('id')), json.dumps(self.export_props()))
+        response = self._execute("PUT", self.get_url(), json.dumps(self.export_props()))
         obj = self._get_response_object(response)
         self.import_props(obj)
 
-        return self.get('id')
+        return self.getId()
 
     def _execute(self, method, url, payload):
         return self._execute_no_reauth(method, url, payload)

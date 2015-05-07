@@ -7,6 +7,9 @@ class AdGroup(Base):
 
     obj_name = "adgroup"
 
+    def getId(self):
+        return self.get("AdGroupId")
+
     def get_by_campaign(self, campaign_id):
         payload = { "CampaignId": campaign_id,
                     "PageStartIndex": 0,

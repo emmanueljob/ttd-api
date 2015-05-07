@@ -79,6 +79,9 @@ class AdGroupTest(Base):
         reloaded = loader.find(ad_group.get('AdGroupId'))
         assert ad_group.get('AdGroupId') == reloaded.get('AdGroupId')
 
+        # test save
+        reloaded.save()
+
     def testGetByCampaign(self):
         # Create an advertiser first.
         adv = Advertiser(AdGroupTest.conn)
