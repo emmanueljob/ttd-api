@@ -34,7 +34,7 @@ class AdGroup(Base):
 
     def set_deals(self, deal_ids):
 
-        self['ContractTargeting'] = { 
+        self['RTBAttributes']['ContractTargeting'] = { 
             'InventoryTargetingType': 'BothMarkets',
             'ContractIds': deal_ids
             }
