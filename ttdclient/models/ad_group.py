@@ -29,7 +29,7 @@ class AdGroup(Base):
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
 
-    def add_deals(self, deal_ids):
+    def set_deals(self, deal_ids):
 
         self['ContractTargeting'] = { 
             'InventoryTargetingType': 'BothMarkets',

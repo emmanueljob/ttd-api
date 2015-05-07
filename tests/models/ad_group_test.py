@@ -68,12 +68,16 @@ class AdGroupTest(Base):
             'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'},
         }
 
-        ad_group.add_deals([contract.get('ContractId')])
+        ad_group.set_deals([contract.get('ContractId')])
         
         ad_group['RTBAttributes'] = attributes
         ad_group.create()
 
         assert ad_group.get('AdGroupId') is not None
+
+        loader = AdGroup(AdGroupTest.conn)
+        reloaded = loader.find(ad_group.get('AdGroupId'))
+        assert ad_group.get('AdGroupId') == reloaded.get('AdGroupId')
 
     def testGetByCampaign(self):
         # Create an advertiser first.
