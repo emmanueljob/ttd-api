@@ -26,7 +26,11 @@ class SiteListTest(Base):
         site_list = SiteList(SiteListTest.conn)
         site_list['SiteListName'] = 'testing site list'
         site_list['AdvertiserId'] = adv.get('AdvertiserId')
-        site_list['SiteListLines'] = [{'Domain': 'eman.com', 'adjustment': 1.0}, {'Domain': 'espn.com', 'adjustment': 1.0}]
+        domains = ["espn.com", "cnn.com", "accuenmedia.com"]
+        site_list.add_domains(domains)
+
         site_list.create()
 
         assert site_list.get('SiteListId') is not None
+
+        site_list.find_by_name(adv.get('AdvertiserId'), "testing site list")
