@@ -43,7 +43,7 @@ class AdGroupTest(Base):
         
         deals = [{
                 "SupplyVendorId": 7, # AppNexus
-                "SupplyVendorDealCode": str(code), # AppNexus
+                "SupplyVendorDealId": str(code), # AppNexus
                 "FloorPriceCPM": {
                     "CurrencyCode": "USD",
                     "Amount": 1.0
@@ -66,12 +66,10 @@ class AdGroupTest(Base):
                 },
             'BaseBidCPM': {'Amount': 1.00, 'CurrencyCode': 'USD'},
             'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'},
-            'ContractTargeting': { 
-                'InventoryTargetingType': 'BothMarkets',
-                'ContractIds': [contract.get('ContractId')]
-                }
         }
 
+        ad_group.add_deals([contract.get('ContractId')])
+        
         ad_group['RTBAttributes'] = attributes
         ad_group.create()
 
@@ -109,7 +107,7 @@ class AdGroupTest(Base):
         
         deals = [{
                 "SupplyVendorId": 7, # AppNexus
-                "SupplyVendorDealCode": str(code), # AppNexus
+                "SupplyVendorDealId": str(code), # AppNexus
                 "FloorPriceCPM": {
                     "CurrencyCode": "USD",
                     "Amount": 1.0

@@ -67,8 +67,8 @@ class Base(dict):
         headers['Content-Type'] = 'application/json'
 
         if method == "GET":
-            print "curl -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{1}'".format(headers['TTD-Auth'], url)
-            return requests.get(url, headers=headers)
+            print "curl -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            return requests.get(url, headers=headers, data=payload)
         elif method == "POST":
             print "curl -XPOST -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
             return requests.post(url, headers=headers, data=payload)
