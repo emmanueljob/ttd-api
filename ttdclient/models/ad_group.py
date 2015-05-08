@@ -1,7 +1,7 @@
 import json
 
 from ttdclient.models.base import Base
-
+from ttdclient.models.site_list import SiteList
 
 class AdGroup(Base):
 
@@ -34,6 +34,9 @@ class AdGroup(Base):
 
     def set_deals(self, deal_ids):
 
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+            
         self['RTBAttributes']['ContractTargeting'] = { 
             'InventoryTargetingType': 'BothMarkets',
             'ContractIds': deal_ids
@@ -43,14 +46,21 @@ class AdGroup(Base):
         
         # get the sitelist
         loader = SiteList(Base.connection)
-        sitelist = loader.find_by_name(self, self['AdvertiserId'], self['AdGroupName'])
+        sitelist = loader.find_by_name(self['AdvertiserId'], self['AdGroupName'])
         if sitelist == None:
             sitelist = SiteList(Base.connection)
             sitelist['SiteListName'] = self['AdGroupName']
             sitelist['AdvertiserId'] = self['AdvertiserId']
 
         sitelist.set_domains(domains)
-        sitelist.save()
+        if sitelist.getId() == 0 or sitelist.getId() is None:
+            sitelist.create()
+        else:
+            sitelist.save()
+
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+            
         self['RTBAttributes']['SiteTargeting'] = { 
             'SiteListIds': [sitelist.getId()]
             }

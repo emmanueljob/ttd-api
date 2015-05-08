@@ -68,9 +68,9 @@ class AdGroupTest(Base):
             'MaxBidCPM': {'Amount': 2.00, 'CurrencyCode': 'USD'},
         }
 
+        ad_group['RTBAttributes'] = attributes
         ad_group.set_deals([contract.get('ContractId')])
         
-        ad_group['RTBAttributes'] = attributes
         ad_group.create()
 
         assert ad_group.get('AdGroupId') is not None
@@ -125,6 +125,7 @@ class AdGroupTest(Base):
         contract.create()
 
         ad_group = AdGroup(AdGroupTest.conn)
+        ad_group['AdvertiserId'] = adv.get('AdvertiserId')
         ad_group['CampaignId'] = campaign.get('CampaignId')
         ad_group['AdGroupName'] = 'ad group test'
         ad_group['IndustryCategoryId'] = 54
