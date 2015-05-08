@@ -12,7 +12,7 @@ class Contract(Base):
                     "PageStartIndex": 0,
                     "PageSize": None }
         method = "POST"
-        url = '{0}/{1}'.format(self.get_url(), 'query/partner')
+        url = '{0}/{1}'.format(self.get_url(), 'query/partner/available')
         
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
