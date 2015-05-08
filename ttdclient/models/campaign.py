@@ -6,6 +6,9 @@ from ttdclient.models.base import Base
 class Campaign(Base):
 
     obj_name = "campaign"
+    
+    def getId(self):
+        return self.get('CampaignId')
 
     def get_by_advertiser(self, advertiser_id):
         payload = { "AdvertiserId": advertiser_id,

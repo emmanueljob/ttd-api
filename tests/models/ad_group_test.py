@@ -125,7 +125,6 @@ class AdGroupTest(Base):
         contract.create()
 
         ad_group = AdGroup(AdGroupTest.conn)
-        ad_group['AdvertiserId'] = adv.get('AdvertiserId')
         ad_group['CampaignId'] = campaign.get('CampaignId')
         ad_group['AdGroupName'] = 'ad group test'
         ad_group['IndustryCategoryId'] = 54
@@ -155,3 +154,4 @@ class AdGroupTest(Base):
         ad_groups = ad_group.get_by_name(campaign.get('CampaignId'), 'ad group test')
         for test_group in ad_groups:
             assert test_group.get('AdGroupName') == 'ad group test'
+

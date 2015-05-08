@@ -2,6 +2,7 @@ import json
 
 from ttdclient.models.base import Base
 from ttdclient.models.site_list import SiteList
+from ttdclient.models.campaign import Campaign
 
 class AdGroup(Base):
 
@@ -43,14 +44,18 @@ class AdGroup(Base):
             }
 
     def set_domains(self, domains):
+
+        # get the campaign so we can get the advertiserId
+        loader = Campaign(Base.connection)
+        campaign = loader.find(self['CampaignId'])
         
         # get the sitelist
         loader = SiteList(Base.connection)
-        sitelist = loader.find_by_name(self['AdvertiserId'], self['AdGroupName'])
+        sitelist = loader.find_by_name(campaign['AdvertiserId'], self['AdGroupName'])
         if sitelist == None:
             sitelist = SiteList(Base.connection)
             sitelist['SiteListName'] = self['AdGroupName']
-            sitelist['AdvertiserId'] = self['AdvertiserId']
+            sitelist['AdvertiserId'] = campaign['AdvertiserId']
 
         sitelist.set_domains(domains)
         if sitelist.getId() == 0 or sitelist.getId() is None:
