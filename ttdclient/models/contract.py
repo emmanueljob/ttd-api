@@ -10,7 +10,7 @@ class Contract(Base):
     def find_by_partner(self, partnerId):
         payload = { "OwnerPartnerIds": [partnerId],
                     "PageStartIndex": 0,
-                    "PageSize": 100 }
+                    "PageSize": None }
         method = "POST"
         url = '{0}/{1}'.format(self.get_url(), 'query/available')
         

@@ -11,6 +11,7 @@ from tests.base import Base
 
 class AdGroupTest(Base):
 
+
     def testCreate(self):
         # Create an advertiser first.
         adv = Advertiser(AdGroupTest.conn)

@@ -14,7 +14,7 @@ class AdGroup(Base):
     def get_by_campaign(self, campaign_id):
         payload = { "CampaignId": campaign_id,
                     "PageStartIndex": 0,
-                    "PageSize": 100 }
+                    "PageSize": None }
         method = "POST"
         url = '{0}/{1}'.format(self.get_url(), 'query/campaign')
         
@@ -26,7 +26,7 @@ class AdGroup(Base):
         payload = { "CampaignId": campaign_id,
                     "SearchTerms": [name],
                     "PageStartIndex": 0,
-                    "PageSize": 100 }
+                    "PageSize": None }
         method = "POST"
         url = '{0}/{1}'.format(self.get_url(), 'query/campaign')
         

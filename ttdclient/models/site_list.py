@@ -14,7 +14,7 @@ class SiteList(Base):
         payload = { "AdvertiserId": advertiser_id,
                     "SearchTerms": [name],
                     "PageStartIndex": 0,
-                    "PageSize": 100 }
+                    "PageSize": None }
 
         method = "POST"
         url = '{0}/{1}'.format(self.get_url(), 'query/advertiser')
