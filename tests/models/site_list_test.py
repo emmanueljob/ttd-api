@@ -27,7 +27,7 @@ class SiteListTest(Base):
         site_list['SiteListName'] = 'testing site list'
         site_list['AdvertiserId'] = adv.get('AdvertiserId')
         domains = ["espn.com", "cnn.com", "accuenmedia.com"]
-        site_list.add_domains(domains)
+        site_list.set_domains(domains)
 
         site_list.create()
 

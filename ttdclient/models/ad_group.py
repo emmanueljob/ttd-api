@@ -38,3 +38,19 @@ class AdGroup(Base):
             'InventoryTargetingType': 'BothMarkets',
             'ContractIds': deal_ids
             }
+
+    def set_domains(self, domains):
+        
+        # get the sitelist
+        loader = SiteList(Base.connection)
+        sitelist = loader.find_by_name(self, self['AdvertiserId'], self['AdGroupName'])
+        if sitelist == None:
+            sitelist = SiteList(Base.connection)
+            sitelist['SiteListName'] = self['AdGroupName']
+            sitelist['AdvertiserId'] = self['AdvertiserId']
+
+        sitelist.set_domains(domains)
+        sitelist.save()
+        self['RTBAttributes']['SiteTargeting'] = { 
+            'SiteListIds': [sitelist.getId()]
+            }

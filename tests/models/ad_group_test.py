@@ -143,6 +143,7 @@ class AdGroupTest(Base):
         }
         
         ad_group['RTBAttributes'] = attributes
+        ad_group.set_domains(["espn.com", "cnn.com"])
         ad_group.create()
 
         ad_groups = ad_group.get_by_campaign(campaign.get('CampaignId'))

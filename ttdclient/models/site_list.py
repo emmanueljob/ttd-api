@@ -7,6 +7,9 @@ class SiteList(Base):
 
     obj_name = "sitelist"
 
+    def getId(self):
+        return self.get("SiteListId")
+
     def find_by_name(self, advertiser_id, name):
         payload = { "AdvertiserId": advertiser_id,
                     "SearchTerms": [name],
@@ -18,10 +21,12 @@ class SiteList(Base):
 
         response = self._execute(method, url, json.dumps(payload))
         objects = self._get_response_objects(response)
-        for obj in objects:
-            print obj
+
+        if len(objects) > 0:
+            return objects[0]
+        return None
         
-    def add_domains(self, domains):
+    def set_domains(self, domains):
         
         to_add = []
         for domain in list(set(domains)):
