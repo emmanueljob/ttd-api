@@ -31,3 +31,6 @@ class Campaign(Base):
         
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
+
+    def getBudget(self):
+        return self.get('Budget'{}).get('Amount')
