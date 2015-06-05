@@ -33,4 +33,4 @@ class Campaign(Base):
         return self._get_response_objects(response)
 
     def getBudget(self):
-        return self.get('Budget'{}).get('Amount')
+        return self.get('Budget', {}).get('Amount')
