@@ -67,5 +67,6 @@ class AdGroup(Base):
             self['RTBAttributes'] = {}
             
         self['RTBAttributes']['SiteTargeting'] = { 
-            'SiteListIds': [sitelist.getId()]
+            'SiteListIds': [sitelist.getId()],
+            'SiteListFallThroughAdjustment': 0
             }
