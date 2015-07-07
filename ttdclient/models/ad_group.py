@@ -43,6 +43,21 @@ class AdGroup(Base):
             'ContractIds': deal_ids
             }
 
+    def set_exchanges(self, exchange_ids):
+
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+            
+        self['RTBAttributes']['SupplyVendorAdjustments'] = { 
+            'InventoryTargetingType': 'BothMarkets',
+            'DefaultAdjustment': 1.0,
+            'Adjustments': []
+            }
+        
+        for id in exchange_ids:
+            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': 1.0})
+
+
     def set_domains(self, domains):
 
         # get the campaign so we can get the advertiserId
