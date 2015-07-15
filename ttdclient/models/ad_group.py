@@ -43,17 +43,19 @@ class AdGroup(Base):
             'ContractIds': deal_ids
             }
 
-    def set_exchanges(self, exchange_ids):
+    def set_exchanges(self, exchange_ids, override=True):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
             
         self['RTBAttributes']['SupplyVendorAdjustments'] = { 
             'InventoryTargetingType': 'BothMarkets',
-            'DefaultAdjustment': 1.0,
-            'Adjustments': []
+            'DefaultAdjustment': 1.0
             }
         
+        if override:
+            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
+
         for id in exchange_ids:
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': 1.0})
 
