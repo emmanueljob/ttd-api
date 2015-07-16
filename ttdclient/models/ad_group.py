@@ -53,7 +53,7 @@ class AdGroup(Base):
             'DefaultAdjustment': 1.0
             }
         
-        if override:
+        if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
