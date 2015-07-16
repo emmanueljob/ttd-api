@@ -94,7 +94,8 @@ class Base(dict):
                 new_obj.import_props(result)
                 rval.append(new_obj)
         else:
-            raise Exception("Bad response code")
+            print response.text
+            raise Exception("Bad response code {0}".format(reponse.text))
 
         return rval
 
@@ -105,7 +106,8 @@ class Base(dict):
             new_obj = self.__class__(Base.connection)
             new_obj.import_props(obj)
         else:
-            raise Exception("Bad response code")
+            print response.text
+            raise Exception("Bad response code {0}".format(reponse.text))
 
         return new_obj
 
