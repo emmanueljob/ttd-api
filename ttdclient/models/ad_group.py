@@ -50,7 +50,7 @@ class AdGroup(Base):
             
         self['RTBAttributes']['SupplyVendorAdjustments'] = { 
             'InventoryTargetingType': 'BothMarkets',
-            'DefaultAdjustment': 1.0
+            'DefaultAdjustment': 0
             }
         
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
