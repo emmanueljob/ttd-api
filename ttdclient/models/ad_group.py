@@ -39,7 +39,7 @@ class AdGroup(Base):
             self['RTBAttributes'] = {}
             
         self['RTBAttributes']['ContractTargeting'] = { 
-            'InventoryTargetingType': 'BothMarkets',
+            'AllowOpenMarketBiddingWhenTargetingContracts': True,
             'ContractIds': deal_ids
             }
 
@@ -49,7 +49,6 @@ class AdGroup(Base):
             self['RTBAttributes'] = {}
             
         self['RTBAttributes']['SupplyVendorAdjustments'] = { 
-            'InventoryTargetingType': 'BothMarkets',
             'DefaultAdjustment': 0
             }
         
