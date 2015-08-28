@@ -43,6 +43,19 @@ class AdGroup(Base):
             'ContractIds': deal_ids
             }
 
+    def get_deals(self):
+
+        if 'RTBAttributes' not in self:
+            return None
+            
+        if 'ContractTargeting' not in self['RTBAttributes']:
+            return None
+
+        if 'ContractIds' not in self['RTBAttributes']['ContractTargeting']:
+            return None
+
+        return self['RTBAttributes']['ContractTargeting']['ContractIds']
+
     def set_exchanges(self, exchange_ids, override=True):
 
         if 'RTBAttributes' not in self:
