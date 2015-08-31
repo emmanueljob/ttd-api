@@ -39,5 +39,5 @@ class Contract(Base):
         url = '{0}/{1}'.format(self.get_url(), 'report/impressions/available')
         
         response = self._execute(method, url, json.dumps(payload))
-        print response.text
+        return self._get_response_object(response)
         
