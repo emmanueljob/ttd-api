@@ -7,25 +7,25 @@ class Connection:
     authorization_tokens = {}
 
     def __init__(self, username=None, password=None, url=None):
-        Connection.password = password
-        Connection.username = username
-        Connection.url = url
+        self.password = password
+        self.username = username
+        self.url = url
 
     def connect(self):
         headers = []
-        headers.push(Connection.get_authorization())
+        headers.push(self.get_authorization())
 
     def get_authorization(self):
-        if Connection.authorization_tokens is None or Connection.username not in Connection.authorization_tokens:
-            Connection.authorization_tokens[Connection.username] = self.authorize()
+        if self.authorization_tokens is None or self.username not in self.authorization_tokens:
+            self.authorization_tokens[self.username] = self.authorize()
 
-        return {'TTD-Auth': Connection.authorization_tokens[Connection.username]}
+        return {'TTD-Auth': self.authorization_tokens[self.username]}
 
     def authorize(self):
-        auth_url = "{0}/authentication".format(Connection.url)
+        auth_url = "{0}/authentication".format(self.url)
         credentials = {
-            "Login": Connection.username,
-            "Password": Connection.password
+            "Login": self.username,
+            "Password": self.password
         }
 
         headers = {'Content-Type': 'application/json'}
@@ -34,8 +34,8 @@ class Connection:
         if response is not None:
             obj = json.loads(response.text)
             if 'Token' in obj:
-                Connection.authorization_tokens[Connection.username] = obj.get('Token')
+                self.authorization_tokens[self.username] = obj.get('Token')
             else:
                 raise Exception('unable to authenticate: ' + response.text)
 
-        return Connection.authorization_tokens[Connection.username]
+        return self.authorization_tokens[self.username]
