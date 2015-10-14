@@ -4,7 +4,7 @@ import json
 
 class Connection:
 
-    authorization_token = None
+    authorization_tokens = {}
 
     def __init__(self, username=None, password=None, url=None):
         Connection.password = password
@@ -16,10 +16,10 @@ class Connection:
         headers.push(Connection.get_authorization())
 
     def get_authorization(self):
-        if Connection.authorization_token is None:
-            Connection.authorization_token = self.authorize()
+        if Connection.authorization_token is None or Connection.authorization_token[Connection.username]:
+            Connection.authorization_token = {Connection.username: self.authorize()}
 
-        return {'TTD-Auth': Connection.authorization_token}
+        return {'TTD-Auth': Connection.authorization_token[Connection.username]}
 
     def authorize(self):
         auth_url = "{0}/authentication".format(Connection.url)
