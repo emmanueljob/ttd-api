@@ -69,6 +69,14 @@ class AdGroup(Base):
 
         return self['RTBAttributes']['ContractTargeting']['ContractIds']
 
+    def get_creatives(self):
+
+        if 'RTBAttributes' not in self:
+            return None
+            
+        return self['RTBAttributes'].get('CreativeIds', None)
+
+
     def set_exchanges(self, exchange_ids, override=True):
 
         if 'RTBAttributes' not in self:
