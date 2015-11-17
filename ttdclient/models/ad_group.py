@@ -120,3 +120,16 @@ class AdGroup(Base):
             'SiteListIds': [sitelist.getId()],
             'SiteListFallThroughAdjustment': 0
             }
+
+    def set_budget(self, budget):
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+            
+        if 'BudgetSettings' not in self['RTBAttributes']:
+            self['RTBAttributes']['BudgetSettings'] = {}
+
+        if 'Budget' not in self['RTBAttributes']['BudgetSettings']:
+            self['RTBAttributes']['BudgetSettings']['Budget'] = {'CurrencyCode': 'USD'}
+        
+        self['RTBAttributes']['BudgetSettings']['Budget']['Amount'] = budget
+        
