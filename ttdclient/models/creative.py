@@ -13,9 +13,12 @@ class Creative(Base):
                     "PageSize": None }
         method = "POST"
         url = '{0}/{1}'.format(self.get_url(), 'query/advertiser')
+
+        print url
+        print "======="
         
-        response = self._execute(method, url, json.dumps(payload))
-        return self._get_response_objects(response)
+        #response = self._execute(method, url, json.dumps(payload))
+        #return self._get_response_objects(response)
     
     def get_size(self):
         
