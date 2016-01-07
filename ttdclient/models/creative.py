@@ -14,6 +14,7 @@ class Creative(Base):
         method = "POST"
         url = '{0}/{1}'.format(self.get_url(), 'query/advertiser')
 
+        print payload
         print url
         print "======="
         
