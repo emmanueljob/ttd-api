@@ -117,12 +117,20 @@ class AdGroup(Base):
             self['RTBAttributes'] = {}
 
         # sitelist.getId() always exists so set as default list
-        currentList = [sitelist.getId()]
         if 'SiteTargeting' in self['RTBAttributes']:
             # If Ad Group as a current list, use it and append the new ID.
             if 'SiteListIds' in self['RTBAttributes']['SiteTargeting']:
                 currentList = self['RTBAttributes']['SiteTargeting']['SiteListIds']
-                currentList.append(sitelist.getId())
+
+                # Weird error if duplicate IDs exist
+                """
+                Exception: Bad response code {"Message":"The request failed validation. Please check your request and try again.","ErrorDetails":[{"Property":"AdGroup.RTBAttributes.SiteTargeting.SiteListIds","Reasons":["The following Site Lists cannot be used for this operation because they are not accessible to Advertiser '9ut3ufp': ."]}]}
+                """
+                if sitelist.getId() not in currentList:
+                    currentList.append(sitelist.getId())
+        else:
+            currentList = [sitelist.getId()]
+
 
         self['RTBAttributes']['SiteTargeting'] = { 
             'SiteListIds': currentList,

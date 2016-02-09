@@ -6,6 +6,7 @@ from ttdclient.models.ad_group import AdGroup
 from ttdclient.models.advertiser import Advertiser
 from ttdclient.models.campaign import Campaign
 from ttdclient.models.contract import Contract
+from ttdclient.models.site_list import SiteList
 from tests.base import Base
 
 
@@ -15,7 +16,7 @@ class AdGroupTest(Base):
     def testGetAdGroup(self):
 
         loader = AdGroup(AdGroupTest.conn)
-        reloaded = loader.find('07owdpm')
+        reloaded = loader.find('o943m30')
 
         reloaded['RTBAttributes'] ['BudgetSettings'] = {
                 'Budget': {'Amount': 1000.00, 'CurrencyCode': 'USD'},
@@ -24,7 +25,32 @@ class AdGroupTest(Base):
                 }
         reloaded['RTBAttributes']['BaseBidCPM'] = {'Amount': 1.00, 'CurrencyCode': 'USD'}
         reloaded['RTBAttributes']['MaxBidCPM'] = {'Amount': 1.00, 'CurrencyCode': 'USD'}
-        reloaded.set_domains(['http://www.espn.com'])
+        reloaded.set_domains(['http://www.ign.com'])
+
+        """
+        print "========================"
+        print reloaded.getId()
+        print "========================"
+
+        currentList = [reloaded.getId()]
+        if 'SiteTargeting' in reloaded['RTBAttributes']:
+            # If Ad Group as a current list, use it and append the new ID.
+            if 'SiteListIds' in reloaded['RTBAttributes']['SiteTargeting']:
+                currentList = reloaded['RTBAttributes']['SiteTargeting']['SiteListIds']
+                currentList.append(reloaded.getId())
+
+        print "!!!!!!!!!!!!!!!!!!!!!"
+        print currentList
+        print "!!!!!!!!!!!!!!!!!!!!!"
+        """
+
+        """
+        reloaded['RTBAttributes']['SiteTargeting'] = { 
+            'SiteListIds': currentList,
+            'SiteListFallThroughAdjustment': 0
+            }
+        """
+
         reloaded.save()
 
 
