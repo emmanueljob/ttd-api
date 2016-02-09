@@ -115,9 +115,17 @@ class AdGroup(Base):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
-            
+
+        # sitelist.getId() always exists so set as default list
+        currentList = [sitelist.getId()]
+        if 'SiteTargeting' in self['RTBAttributes']:
+            # If Ad Group as a current list, use it and append the new ID.
+            if 'SiteListIds' in self['RTBAttributes']['SiteTargeting']:
+                currentList = self['RTBAttributes']['SiteTargeting']['SiteListIds']
+                currentList.append(sitelist.getId())
+
         self['RTBAttributes']['SiteTargeting'] = { 
-            'SiteListIds': [sitelist.getId()],
+            'SiteListIds': currentList,
             'SiteListFallThroughAdjustment': 0
             }
 

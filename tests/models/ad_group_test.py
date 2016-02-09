@@ -12,6 +12,22 @@ from tests.base import Base
 class AdGroupTest(Base):
 
 
+    def testGetAdGroup(self):
+
+        loader = AdGroup(AdGroupTest.conn)
+        reloaded = loader.find('07owdpm')
+
+        reloaded['RTBAttributes'] ['BudgetSettings'] = {
+                'Budget': {'Amount': 1000.00, 'CurrencyCode': 'USD'},
+                'DailyBudget': {'Amount': 100.00, 'CurrencyCode': 'USD'},
+                'PacingEnabled': True
+                }
+        reloaded['RTBAttributes']['BaseBidCPM'] = {'Amount': 1.00, 'CurrencyCode': 'USD'}
+        reloaded['RTBAttributes']['MaxBidCPM'] = {'Amount': 1.00, 'CurrencyCode': 'USD'}
+        reloaded.set_domains(['http://www.espn.com'])
+        reloaded.save()
+
+
     def testCreate(self):
         # Create an advertiser first.
         adv = Advertiser(AdGroupTest.conn)
