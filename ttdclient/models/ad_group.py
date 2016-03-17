@@ -131,7 +131,7 @@ class AdGroup(Base):
         else:
             currentList = [sitelist.getId()]
 
-        if domain == None and sitelist.getId() in currentList:
+        if domains == None and sitelist.getId() in currentList:
             currentList.remove(sitelist.getId())
 
         self['RTBAttributes']['SiteTargeting'] = { 
