@@ -134,10 +134,15 @@ class AdGroup(Base):
         if not domains and sitelist.getId() in currentList:
             currentList.remove(sitelist.getId())
 
-        self['RTBAttributes']['SiteTargeting'] = { 
-            'SiteListIds': currentList,
-            'SiteListFallThroughAdjustment': 0
-            }
+        if not currentList:
+            self['RTBAttributes']['SiteTargeting'] = {
+                'SiteListIds': currentList,
+                'SiteListFallThroughAdjustment': 0
+                }
+        else:
+            self['RTBAttributes']['SiteTargeting'] = {
+                'SiteListFallThroughAdjustment': 1
+                }
 
     def set_budget(self, budget):
         if 'RTBAttributes' not in self:
