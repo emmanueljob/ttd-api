@@ -137,7 +137,7 @@ class AdGroup(Base):
         if len(currentList) == 0:
             self['RTBAttributes']['SiteTargeting'] = {
                 'SiteListIds': [],
-                'SiteListFallThroughAdjustment': 0
+                'SiteListFallThroughAdjustment': 1
                 }
         else:
             self['RTBAttributes']['SiteTargeting'] = {
