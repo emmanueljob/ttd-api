@@ -132,14 +132,17 @@ class AdGroup(Base):
             currentList = [sitelist.getId()]
 
         if not domains and sitelist.getId() in currentList:
+            print sitelist.getId()
             currentList.remove(sitelist.getId())
 
         if not currentList:
+            print currentList
             self['RTBAttributes']['SiteTargeting'] = {
                 'SiteListIds': currentList,
                 'SiteListFallThroughAdjustment': 0
                 }
         else:
+            print "none found"
             self['RTBAttributes']['SiteTargeting'] = {
                 'SiteListFallThroughAdjustment': 1
                 }
