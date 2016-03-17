@@ -134,7 +134,7 @@ class AdGroup(Base):
         if len(domains) == 0 and sitelist.getId() in currentList:
             currentList.remove(sitelist.getId())
 
-        if not currentList:
+        if len(currentList) == 0:
             self['RTBAttributes']['SiteTargeting'] = {
                 'SiteListFallThroughAdjustment': 1
                 }
