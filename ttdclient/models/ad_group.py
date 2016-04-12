@@ -95,6 +95,8 @@ class AdGroup(Base):
 
     def set_domains(self, domains):
 
+        print "start set_domains"
+
         # get the campaign so we can get the advertiserId
         loader = Campaign(Base.connection)
         campaign = loader.find(self['CampaignId'])
@@ -131,13 +133,20 @@ class AdGroup(Base):
         else:
             currentList = [sitelist.getId()]
 
-        if domains == None and sitelist.getId() in currentList:
+        if len(domains) == 0 and sitelist.getId() in currentList:
             currentList.remove(sitelist.getId())
 
-        self['RTBAttributes']['SiteTargeting'] = { 
-            'SiteListIds': currentList,
-            'SiteListFallThroughAdjustment': 0
-            }
+        if len(currentList) == 0:
+            print "no current list"
+            self['RTBAttributes']['SiteTargeting'] = {
+                'SiteListIds': [],
+                'SiteListFallThroughAdjustment': 1
+                }
+        else:
+            self['RTBAttributes']['SiteTargeting'] = {
+                'SiteListIds': currentList,
+                'SiteListFallThroughAdjustment': 0
+                }
 
     def set_budget(self, budget):
         if 'RTBAttributes' not in self:
