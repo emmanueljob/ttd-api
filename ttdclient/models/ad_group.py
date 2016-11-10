@@ -43,6 +43,16 @@ class AdGroup(Base):
             'ContractIds': deal_ids
             }
 
+    def set_deal_groups(self, deal_group_ids):
+
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+            
+        self['RTBAttributes']['ContractTargeting'] = { 
+            'AllowOpenMarketBiddingWhenTargetingContracts': True,
+            'ContractGroupIds': deal_group_ids
+            }
+
     def target_exchanges(self, target=True):
 
         if 'RTBAttributes' not in self:
@@ -68,6 +78,19 @@ class AdGroup(Base):
             return None
 
         return self['RTBAttributes']['ContractTargeting']['ContractIds']
+
+    def get_deal_groups(self):
+
+        if 'RTBAttributes' not in self:
+            return None
+            
+        if 'ContractTargeting' not in self['RTBAttributes']:
+            return None
+
+        if 'ContractIds' not in self['RTBAttributes']['ContractTargeting']:
+            return None
+
+        return self['RTBAttributes']['ContractTargeting']['ContractGroupIds']
 
     def get_creatives(self):
 
