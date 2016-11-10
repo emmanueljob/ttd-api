@@ -118,8 +118,6 @@ class AdGroup(Base):
 
     def set_domains(self, domains):
 
-        print "start set_domains"
-
         # get the campaign so we can get the advertiserId
         loader = Campaign(Base.connection)
         campaign = loader.find(self['CampaignId'])
@@ -160,7 +158,6 @@ class AdGroup(Base):
             currentList.remove(sitelist.getId())
 
         if len(currentList) == 0:
-            print "no current list"
             self['RTBAttributes']['SiteTargeting'] = {
                 'SiteListIds': [],
                 'SiteListFallThroughAdjustment': 1
