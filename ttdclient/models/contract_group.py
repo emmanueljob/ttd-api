@@ -7,7 +7,7 @@ class ContractGroup(Base):
 
     obj_name = "contractgroup"
 
-    def find_by_advertiser(self, partnerId, advertiserId):
+    def find_by_advertiser(self, advertiserId):
         payload = { "AdvertiserId": advertiserId,
                     "PageStartIndex": 0,
                     "PageSize": None }
@@ -16,6 +16,16 @@ class ContractGroup(Base):
         
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
+
+    """
+    def find_by_id(self, contractGroupId):
+        payload = {  }
+        method = "GET"
+        url = '{0}/{1}'.format(self.get_url(), contractGroupId)
+        
+        response = self._execute(method, url, json.dumps(payload))
+        return self._get_response_objects(response)
+    """
 
     def get_avails(self, contractId, startDate, endDate):
         payload = { "ContractGroupId": contractId,
