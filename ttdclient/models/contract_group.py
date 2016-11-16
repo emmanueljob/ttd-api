@@ -39,4 +39,7 @@ class ContractGroup(Base):
         
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_object(response)
+
+    def set_deals(self, deal_ids):
+        self['ContractIds'] = deal_ids
         
