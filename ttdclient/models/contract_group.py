@@ -7,6 +7,9 @@ class ContractGroup(Base):
 
     obj_name = "contractgroup"
 
+    def getId(self):
+        return self.get("ContractGroupId")
+
     def find_by_advertiser(self, advertiserId):
         payload = { "AdvertiserId": advertiserId,
                     "PageStartIndex": 0,
