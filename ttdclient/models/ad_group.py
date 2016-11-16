@@ -33,16 +33,21 @@ class AdGroup(Base):
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
 
-    def set_deals(self, deal_ids):
+    def set_deals(self, deal_ids, deal_group_ids=None):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
+
+        if deal_group_ids is None:
+            deal_group_ids = []
             
         self['RTBAttributes']['ContractTargeting'] = { 
             'AllowOpenMarketBiddingWhenTargetingContracts': True,
-            'ContractIds': deal_ids
+            'ContractIds': deal_ids,
+            'ContractGroupIds': deal_group_ids
             }
 
+    """
     def set_deal_groups(self, deal_group_ids):
 
         if 'RTBAttributes' not in self:
@@ -52,6 +57,7 @@ class AdGroup(Base):
             'AllowOpenMarketBiddingWhenTargetingContracts': True,
             'ContractGroupIds': deal_group_ids
             }
+    """
 
     def target_exchanges(self, target=True):
 
