@@ -33,10 +33,13 @@ class AdGroup(Base):
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
 
-    def set_deals(self, deal_ids, deal_group_ids=None):
+    def set_deals(self, deal_ids=None, deal_group_ids=None):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
+
+        if deal_ids is None:
+            deal_ids = []
 
         if deal_group_ids is None:
             deal_group_ids = []
