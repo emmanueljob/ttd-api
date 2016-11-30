@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#
+# Provision a new virtual machine for StickyAds API development
+# Used by Vagrant
+#
+
+# --------------------
+echo "Starting provision"
+# --------------------
+echo "Chown all ttd-api files to vagrant:vagrant"
+chown -R vagrant:vagrant ~/ttd-api
+# --------------------
+echo "Updating Ubuntu"
+sudo apt-get -y update
+sudo apt-get -y upgrade
+# --------------------
+echo "Install packages required to run the TTD API"
+sudo apt-get install -y apache2
+sudo apt-get install -y python-dev
+sudo apt-get install -y python-setuptools
+sudo apt-get install -y git
+sudo apt-get install -y postgresql-server-dev-9.1
+sudo apt-get install -y postgresql-client
+sudo apt-get install -y postgresql
+sudo apt-get install -y postgresql-contrib
+sudo apt-get install -y python-setuptools
+sudo apt-get install -y python-django
+sudo apt-get install -y python-virtualenv
+# --------------------
+echo "Installing virtualenv"
+sudo pip install virtualenv
+# --------------------
+echo "Configuring virtualenv"
+mkdir ~/virtualenvs
+cd ~/virtualenvs
+virtualenv ttd-api_virtualenv
+source ~/virtualenvs/ttd-api/bin/activate #JG does this do anything?
+# --------------------
+echo "Provision successful"
+echo ""
+echo ""
+echo "To run the app:"
+echo "   1) vagrant ssh"
+echo "   2) source ~/virtualenvs/ttd-api_virtualenv/bin/activate"
+# --------------------
