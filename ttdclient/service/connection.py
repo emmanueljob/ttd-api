@@ -28,7 +28,9 @@ class Connection:
             "Password": self.password
         }
 
+        print credentials
         headers = {'Content-Type': 'application/json'}
+        print "curl -XPOST -H '{0}' -d '{1}' {2}".format(json.dumps(headers), json.dumps(credentials), auth_url)
         response = requests.post(auth_url, headers=headers, data=json.dumps(credentials))
 
         if response is not None:

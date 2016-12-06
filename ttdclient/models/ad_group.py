@@ -7,6 +7,20 @@ from ttdclient.models.campaign import Campaign
 class AdGroup(Base):
 
     obj_name = "adgroup"
+    updates = {}
+
+
+    def save(self):
+        if self.getId() is None or self.getId() == 0:
+            raise Exception("cant update an object with no id")
+
+        # only push changes
+        response = self._execute("PUT", self.get_url(), json.dumps(self.updates))
+        obj = self._get_response_object(response)
+        self.import_props(obj)
+
+        # once updates reset changes to empty
+        self.updates = {}
 
     def getId(self):
         return self.get("AdGroupId")
@@ -36,7 +50,7 @@ class AdGroup(Base):
     def set_deals(self, deal_ids=None, deal_group_ids=None):
 
         if 'RTBAttributes' not in self:
-            self['RTBAttributes'] = {}
+            self.updates['RTBAttributes'] = {}
 
         if deal_ids is None:
             deal_ids = []
@@ -44,7 +58,7 @@ class AdGroup(Base):
         if deal_group_ids is None:
             deal_group_ids = []
             
-        self['RTBAttributes']['ContractTargeting'] = { 
+        self.updates['RTBAttributes']['ContractTargeting'] = { 
             'AllowOpenMarketBiddingWhenTargetingContracts': True,
             'ContractIds': deal_ids,
             'ContractGroupIds': deal_group_ids
@@ -53,10 +67,10 @@ class AdGroup(Base):
     """
     def set_deal_groups(self, deal_group_ids):
 
-        if 'RTBAttributes' not in self:
-            self['RTBAttributes'] = {}
+        if 'RTBAttributes' not in self.updates:
+            self.updates['RTBAttributes'] = {}
             
-        self['RTBAttributes']['ContractTargeting'] = { 
+        self.updates['RTBAttributes']['ContractTargeting'] = { 
             'AllowOpenMarketBiddingWhenTargetingContracts': True,
             'ContractGroupIds': deal_group_ids
             }
@@ -64,65 +78,79 @@ class AdGroup(Base):
 
     def target_exchanges(self, target=True):
 
-        if 'RTBAttributes' not in self:
-            self['RTBAttributes'] = {}
+        if 'RTBAttributes' not in self.updates:
+            self.updates['RTBAttributes'] = {}
             
-        if 'ContractTargeting' not in self['RTBAttributes']:
-            return None
+        if 'ContractTargeting' not in self.updates['RTBAttributes']:
+            self.updates['RTBAttributes']['ContractTargeting'] = {}
 
-        if 'ContractIds' not in self['RTBAttributes']['ContractTargeting']:
-            return None
+        if 'ContractIds' not in self.updates['RTBAttributes']['ContractTargeting']:
+            self.updates['RTBAttributes']['ContractTargeting']['ContractIds']
 
-        self['RTBAttributes']['ContractTargeting']['AllowOpenMarketBiddingWhenTargetingContracts'] = target
+        self.updates['RTBAttributes']['ContractTargeting']['AllowOpenMarketBiddingWhenTargetingContracts'] = target
 
     def get_deals(self):
+        if self._get_deals(self.update):
+           return self._get_deals(self.update)
+        return self._get_deals(self)
 
-        if 'RTBAttributes' not in self:
+    def _get_deals(dict_to_check):
+
+        if 'RTBAttributes' not in dict_to_check:
             return None
             
-        if 'ContractTargeting' not in self['RTBAttributes']:
+        if 'ContractTargeting' not in dict_to_check['RTBAttributes']:
             return None
 
-        if 'ContractIds' not in self['RTBAttributes']['ContractTargeting']:
+        if 'ContractIds' not in dict_to_check['RTBAttributes']['ContractTargeting']:
             return None
 
-        return self['RTBAttributes']['ContractTargeting']['ContractIds']
+        return dict_to_check['RTBAttributes']['ContractTargeting']['ContractIds']
 
     def get_deal_groups(self):
+        if self._get_deal_groups(self.update):
+           return self._get_deal_groups(self.update)
+        return self._get_deal_groups(self)
 
-        if 'RTBAttributes' not in self:
+    def _get_deal_groups(self):
+
+        if 'RTBAttributes' not in dict_to_check:
             return None
             
-        if 'ContractTargeting' not in self['RTBAttributes']:
+        if 'ContractTargeting' not in dict_to_check['RTBAttributes']:
             return None
 
-        if 'ContractIds' not in self['RTBAttributes']['ContractTargeting']:
+        if 'ContractIds' not in dict_to_check['RTBAttributes']['ContractTargeting']:
             return None
 
-        return self['RTBAttributes']['ContractTargeting']['ContractGroupIds']
+        return dict_to_check['RTBAttributes']['ContractTargeting']['ContractGroupIds']
 
     def get_creatives(self):
+        if self._get_creatives(self.update):
+           return self._get_creatives(self.update)
+        return self._get_creatives(self)
 
-        if 'RTBAttributes' not in self:
+    def _get_creatives(self):
+
+        if 'RTBAttributes' not in dict_to_check:
             return None
             
-        return self['RTBAttributes'].get('CreativeIds', None)
-
+        return dict_to_check['RTBAttributes'].get('CreativeIds', None)
 
     def set_exchanges(self, exchange_ids, override=True):
 
-        if 'RTBAttributes' not in self:
-            self['RTBAttributes'] = {}
+        if 'RTBAttributes' not in self.updates:
+            self.updates['RTBAttributes'] = {}
             
-        self['RTBAttributes']['SupplyVendorAdjustments'] = { 
+        self.updates['RTBAttributes']['SupplyVendorAdjustments'] = { 
             'DefaultAdjustment': 0.0
             }
         
-        if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
-            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
+        if override or 'Adjustments' not in self.updates['RTBAttributes']['SupplyVendorAdjustments']:
+            self.updates['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
-            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': 1.0})
+            self.updates['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': 1.0})
 
 
     def set_domains(self, domains):
@@ -145,14 +173,14 @@ class AdGroup(Base):
         else:
             sitelist.save()
 
-        if 'RTBAttributes' not in self:
-            self['RTBAttributes'] = {}
+        if 'RTBAttributes' not in self.updates:
+            self.updates['RTBAttributes'] = {}
 
         # sitelist.getId() always exists so set as default list
-        if 'SiteTargeting' in self['RTBAttributes']:
+        if 'SiteTargeting' in self.updates['RTBAttributes']:
             # If Ad Group as a current list, use it and append the new ID.
-            if 'SiteListIds' in self['RTBAttributes']['SiteTargeting']:
-                currentList = self['RTBAttributes']['SiteTargeting']['SiteListIds']
+            if 'SiteListIds' in self.updates['RTBAttributes']['SiteTargeting']:
+                currentList = self.updates['RTBAttributes']['SiteTargeting']['SiteListIds']
 
                 # Weird error if duplicate IDs exist
                 """
@@ -167,25 +195,25 @@ class AdGroup(Base):
             currentList.remove(sitelist.getId())
 
         if len(currentList) == 0:
-            self['RTBAttributes']['SiteTargeting'] = {
+            self.updates['RTBAttributes']['SiteTargeting'] = {
                 'SiteListIds': [],
                 'SiteListFallThroughAdjustment': 1
                 }
         else:
-            self['RTBAttributes']['SiteTargeting'] = {
+            self.updates['RTBAttributes']['SiteTargeting'] = {
                 'SiteListIds': currentList,
                 'SiteListFallThroughAdjustment': 0
                 }
 
     def set_budget(self, budget):
-        if 'RTBAttributes' not in self:
-            self['RTBAttributes'] = {}
+        if 'RTBAttributes' not in self.updates:
+            self.updates['RTBAttributes'] = {}
             
-        if 'BudgetSettings' not in self['RTBAttributes']:
-            self['RTBAttributes']['BudgetSettings'] = {}
+        if 'BudgetSettings' not in self.updates['RTBAttributes']:
+            self.updates['RTBAttributes']['BudgetSettings'] = {}
 
-        if 'Budget' not in self['RTBAttributes']['BudgetSettings']:
-            self['RTBAttributes']['BudgetSettings']['Budget'] = {'CurrencyCode': 'USD'}
+        if 'Budget' not in self.updates['RTBAttributes']['BudgetSettings']:
+            self.updates['RTBAttributes']['BudgetSettings']['Budget'] = {'CurrencyCode': 'USD'}
         
-        self['RTBAttributes']['BudgetSettings']['Budget']['Amount'] = budget
+        self.updates['RTBAttributes']['BudgetSettings']['Budget']['Amount'] = budget
         
