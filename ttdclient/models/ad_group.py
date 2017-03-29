@@ -177,7 +177,7 @@ class AdGroup(Base):
                 'SiteListFallThroughAdjustment': 0
                 }
 
-    def set_budget(self, budget):
+    def set_budget(self, budget, currency_code):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
             
@@ -185,7 +185,7 @@ class AdGroup(Base):
             self['RTBAttributes']['BudgetSettings'] = {}
 
         if 'Budget' not in self['RTBAttributes']['BudgetSettings']:
-            self['RTBAttributes']['BudgetSettings']['Budget'] = {'CurrencyCode': 'USD'}
+            self['RTBAttributes']['BudgetSettings']['Budget'] = {'CurrencyCode': currency_code}
         
         self['RTBAttributes']['BudgetSettings']['Budget']['Amount'] = budget
         
