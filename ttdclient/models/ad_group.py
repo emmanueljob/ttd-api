@@ -96,7 +96,7 @@ class AdGroup(Base):
         if 'ContractTargeting' not in self['RTBAttributes']:
             return None
 
-        if 'ContractIds' not in self['RTBAttributes']['ContractTargeting']:
+        if 'ContractGroupIds' not in self['RTBAttributes']['ContractTargeting']:
             return None
 
         return self['RTBAttributes']['ContractTargeting']['ContractGroupIds']
