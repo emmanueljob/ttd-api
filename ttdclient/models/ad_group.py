@@ -50,6 +50,29 @@ class AdGroup(Base):
             'ContractGroupIds': deal_group_ids
             }
 
+    def set_delivery_profile_adjustments(self, deal_id=None):
+
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+
+        if deal_ids is None:
+            deal_ids = []
+        else:
+            delivery_profile_adjustments = []
+            for deal_id in deal_ids:
+                val = {}
+                val["Id"] = deal_id
+                val["Adjustment"] = 1
+                delivery_profile_adjustments.append(val)
+
+        self['RTBAttributes']['ContractTargeting'] = { 
+            'AllowOpenMarketBiddingWhenTargetingContracts': True,
+            'ContractIds': [],
+            'ContractGroupIds': [],
+            'ContractAdjustments': [],
+            "DeliveryProfileAdjustments": delivery_profile_adjustments
+            }
+
     """
     def set_deal_groups(self, deal_group_ids):
 
