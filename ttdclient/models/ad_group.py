@@ -50,7 +50,7 @@ class AdGroup(Base):
             'ContractGroupIds': deal_group_ids
             }
 
-    def set_delivery_profile_adjustments(self, deal_id=None):
+    def set_delivery_profile_adjustments(self, deal_ids=None):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
