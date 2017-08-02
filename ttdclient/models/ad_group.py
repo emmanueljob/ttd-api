@@ -45,7 +45,6 @@ class AdGroup(Base):
             deal_group_ids = []
             
         self['RTBAttributes']['ContractTargeting'] = { 
-            'AllowOpenMarketBiddingWhenTargetingContracts': True,
             'ContractIds': deal_ids,
             'ContractGroupIds': deal_group_ids
             }
