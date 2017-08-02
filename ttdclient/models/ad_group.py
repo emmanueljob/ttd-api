@@ -65,6 +65,7 @@ class AdGroup(Base):
                 delivery_profile_adjustments.append(val)
 
         self['RTBAttributes']['ContractTargeting'] = { 
+            'AllowOpenMarketBiddingWhenTargetingContracts': False,
             'ContractIds': [],
             'ContractGroupIds': [],
             'ContractAdjustments': [],
@@ -83,7 +84,7 @@ class AdGroup(Base):
             }
     """
 
-    def target_exchanges(self, target=True):
+    def target_exchanges(self, target=False):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
