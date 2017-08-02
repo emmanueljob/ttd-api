@@ -66,7 +66,6 @@ class AdGroup(Base):
                 delivery_profile_adjustments.append(val)
 
         self['RTBAttributes']['ContractTargeting'] = { 
-            'AllowOpenMarketBiddingWhenTargetingContracts': True,
             'ContractIds': [],
             'ContractGroupIds': [],
             'ContractAdjustments': [],
@@ -85,7 +84,7 @@ class AdGroup(Base):
             }
     """
 
-    def target_exchanges(self, target):
+    def target_exchanges(self, target=True):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
@@ -96,7 +95,6 @@ class AdGroup(Base):
         if 'ContractIds' not in self['RTBAttributes']['ContractTargeting']:
             return None
 
-        print "FROM TTD CLIENT: ", target
         self['RTBAttributes']['ContractTargeting']['AllowOpenMarketBiddingWhenTargetingContracts'] = target
 
     def get_deals(self):
