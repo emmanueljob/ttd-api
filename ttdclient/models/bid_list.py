@@ -18,4 +18,14 @@ class BidList(Base):
             }
 
     def set_bid_lines(self, lines):
-        self['BidLines'] = [lines]
+        self['BidLines'] = lines
+
+    def get_by_agroup(self, dsp_lineitem_id):
+        payload = { "AdGroupId": dsp_lineitem_id,
+                    "PageStartIndex": 0,
+                    "PageSize": None }
+        method = "POST"
+        url = '{0}/{1}'.format(self.get_url(), 'query/adgroup')
+
+        response = self._execute(method, url, json.dumps(payload))
+        return self._get_response_objects(response)
