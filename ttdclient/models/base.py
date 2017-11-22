@@ -43,9 +43,6 @@ class Base(dict):
             del self['id']
 
         print "CREATING"
-        print "============"
-        print self.export_props()
-        print "============"
         response = self._execute("POST", self.get_create_url(), json.dumps(self.export_props()))
         obj = self._get_response_object(response)
         self.import_props(obj)
@@ -89,6 +86,13 @@ class Base(dict):
 
     def _get_response_objects(self, response):
         rval = []
+
+        print "#@@@@@@@@@@@"
+        print self.response
+        print "#@@@@@@@@@@@"
+        print response.text
+        print "#@@@@@@@@@@@"
+
         obj = json.loads(response.text)
         if obj and 'Result' in obj:
             results = obj.get('Result')
