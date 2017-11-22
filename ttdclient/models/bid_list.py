@@ -20,7 +20,7 @@ class BidList(Base):
     def set_bid_lines(self, lines):
         self['BidLines'] = lines
 
-    def get_by_agroup(self, dsp_lineitem_id):
+    def get_by_ad_group(self, dsp_lineitem_id):
         payload = { "AdGroupId": dsp_lineitem_id,
                     "PageStartIndex": 0,
                     "PageSize": None }

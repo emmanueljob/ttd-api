@@ -43,6 +43,9 @@ class Base(dict):
             del self['id']
 
         print "CREATING"
+        print "============"
+        print self.export_props()
+        print "============"
         response = self._execute("POST", self.get_create_url(), json.dumps(self.export_props()))
         obj = self._get_response_object(response)
         self.import_props(obj)
