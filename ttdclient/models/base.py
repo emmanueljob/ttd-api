@@ -86,13 +86,6 @@ class Base(dict):
 
     def _get_response_objects(self, response):
         rval = []
-
-        print "#@@@@@@@@@@@"
-        print self.response
-        print "#@@@@@@@@@@@"
-        print response.text
-        print "#@@@@@@@@@@@"
-
         obj = json.loads(response.text)
         if obj and 'Result' in obj:
             results = obj.get('Result')
@@ -107,6 +100,13 @@ class Base(dict):
         return rval
 
     def _get_response_object(self, response):
+
+        print "#@@@@@@@@@@@"
+        print self.response
+        print "#@@@@@@@@@@@"
+        print response.text
+        print "#@@@@@@@@@@@"
+
         obj = json.loads(response.text)
         new_obj = None
         if obj and response.status_code == 200:
