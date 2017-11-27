@@ -4,7 +4,7 @@ from ttdclient.models.base import Base
 
 class BidList(Base):
 
-    obj_name = "bidlist"
+    obj_name = "adgroup/bidlist"
 
     def getId(self):
         return self.get("BidListId")
@@ -20,12 +20,15 @@ class BidList(Base):
     def set_bid_lines(self, lines):
         self['BidLines'] = lines
 
+        response = self._execute(method, url, json.dumps(payload))
+        return self._get_response_objects(response)
+
     def get_by_ad_group(self, dsp_lineitem_id):
         payload = { "AdGroupId": dsp_lineitem_id,
                     "PageStartIndex": 0,
                     "PageSize": None }
         method = "POST"
-        url = '{0}/{1}'.format(self.get_url(), 'query/adgroup')
+        url = '{0}/{1}'.format(self.get_url(), 'query/')
 
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
