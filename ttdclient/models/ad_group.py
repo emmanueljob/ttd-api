@@ -144,7 +144,12 @@ class AdGroup(Base):
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
-            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': 1.0})
+            adjustment = 1.0
+            for x in self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments']:
+                if int(x.get('Id')) == int(id):
+                    adjustment = x.get('Adjustment')
+
+            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': adjustment})
 
 
     def set_domains(self, domains):
