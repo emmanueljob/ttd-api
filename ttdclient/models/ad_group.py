@@ -142,10 +142,9 @@ class AdGroup(Base):
         
         print 'Override: ' + str(override)
         print 'Adjustment check: '
-        print "self['RTBAttributes'].get('SupplyVendorAdjustments') value: "
-        print self['RTBAttributes'].get('SupplyVendorAdjustments')
-        print "self['RTBAttributes']['SupplyVendorAdjustments'] value: "
-        print self['RTBAttributes']['SupplyVendorAdjustments']
+        print self
+        print self['RTBAttributes']
+        print "end adjustment check"
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
             print 'inside override'
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
