@@ -140,7 +140,12 @@ class AdGroup(Base):
             'DefaultAdjustment': 0.0
             }
         
+        print 'Override: ' + override
+        print 'Adjustment check: '
+        print "self['RTBAttributes'].get('SupplyVendorAdjustments') value: " + self['RTBAttributes'].get('SupplyVendorAdjustments')
+        print "self['RTBAttributes']['SupplyVendorAdjustments'] value: " + self['RTBAttributes']['SupplyVendorAdjustments']
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
+            print 'inside override'
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
