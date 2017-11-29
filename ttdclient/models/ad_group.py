@@ -144,9 +144,13 @@ class AdGroup(Base):
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
+            print self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments']
+            print "Checking ids..."
             adjustment = 1.0
             for x in self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments']:
+                print "in adjustment loop..."
                 if int(x.get('Id')) == int(id):
+                    print "in comparison if statement..."
                     adjustment = x.get('Adjustment')
 
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': adjustment})
