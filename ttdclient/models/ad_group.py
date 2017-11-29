@@ -140,10 +140,12 @@ class AdGroup(Base):
             'DefaultAdjustment': 0.0
             }
         
-        print 'Override: ' + override
+        print 'Override: ' + str(override)
         print 'Adjustment check: '
-        print "self['RTBAttributes'].get('SupplyVendorAdjustments') value: " + self['RTBAttributes'].get('SupplyVendorAdjustments')
-        print "self['RTBAttributes']['SupplyVendorAdjustments'] value: " + self['RTBAttributes']['SupplyVendorAdjustments']
+        print "self['RTBAttributes'].get('SupplyVendorAdjustments') value: "
+        print self['RTBAttributes'].get('SupplyVendorAdjustments')
+        print "self['RTBAttributes']['SupplyVendorAdjustments'] value: "
+        print self['RTBAttributes']['SupplyVendorAdjustments']
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
             print 'inside override'
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
