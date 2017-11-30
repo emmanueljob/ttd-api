@@ -139,24 +139,17 @@ class AdGroup(Base):
 #        self['RTBAttributes']['SupplyVendorAdjustments'] = { 
 #            'DefaultAdjustment': 0.0
 #            }
-        
-        print 'Override: ' + str(override)
-        print 'Adjustment check: '
-        print self
-        print self['RTBAttributes']
-        print "end adjustment check"
+    
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
             print 'inside override'
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
-            print "Level 1:"
-            print self['RTBAttributes'].get('SupplyVendorAdjustments')
             print "Level 2/list:"
-            print self['RTBAttributes'].get('SupplyVendorAdjustments', {}).getlist('Adjustments')
+            print self['RTBAttributes'].get('SupplyVendorAdjustments').get('Adjustments')
             adjustment = 1.0
 
-            for x in self['RTBAttributes'].get('SupplyVendorAdjustments', {}).getlist('Adjustments'):
+            for x in self['RTBAttributes'].get('SupplyVendorAdjustments').get('Adjustments'):
                 print "in adjustment loop..."
                 if int(x.get('Id')) == int(id):
                     print "in comparison if statement..."
