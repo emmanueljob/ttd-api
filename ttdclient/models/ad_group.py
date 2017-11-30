@@ -136,23 +136,19 @@ class AdGroup(Base):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
             
-#        self['RTBAttributes']['SupplyVendorAdjustments'] = { 
-#            'DefaultAdjustment': 0.0
-#            }
+        self['RTBAttributes']['SupplyVendorAdjustments']['DefaultAdjustment'] = 0.0 
     
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
-            print 'inside override'
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
-            print "Level 2/list:"
-            print self['RTBAttributes'].get('SupplyVendorAdjustments').get('Adjustments')
+
+            # Default
             adjustment = 1.0
 
+            # If we get a 'Bid Adjustment' from TTD, use it instead of the default
             for x in self['RTBAttributes'].get('SupplyVendorAdjustments').get('Adjustments'):
-                print "in adjustment loop..."
                 if int(x.get('Id')) == int(id):
-                    print "in comparison if statement..."
                     adjustment = x.get('Adjustment')
 
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': adjustment})
