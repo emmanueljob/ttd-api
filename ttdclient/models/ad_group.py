@@ -136,9 +136,9 @@ class AdGroup(Base):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
             
-        self['RTBAttributes']['SupplyVendorAdjustments'] = { 
-            'DefaultAdjustment': 0.0
-            }
+#        self['RTBAttributes']['SupplyVendorAdjustments'] = { 
+#            'DefaultAdjustment': 0.0
+#            }
         
         print 'Override: ' + str(override)
         print 'Adjustment check: '
