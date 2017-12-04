@@ -10,7 +10,7 @@ class BidList(Base):
         return self.get("BidListId")
 
     def create_bid_list(self, name, target_list='TargetList', resolution_type='SingleMatchOnly'):
-        self.obj_name = "adgroup/" + obj_name
+        self.obj_name = "adgroup/" + self.obj_name
 
         self['BidList'] = { 
             "Name": name,
