@@ -28,14 +28,15 @@ class SiteList(Base):
         
     def set_domains(self, domains):
         to_add = []
+        hits = {}
         print "PRINTING SELF"
         print self
         loader = SiteList(Base.connection)
         a = loader.find('bjrc1vj')
         print a
         for ttd_domain in a.get('SiteListLines'):
-            print ttd_domain
-        #    hits[ttd_domain['Domain']] = ttd_domain['Adjustment']
+            hits[ttd_domain['Domain']] = ttd_domain['Adjustment']
+        print hits
         print "END PRINTING SELF"
         for domain in list(set(domains)):
             default_adjustment = 1.0
