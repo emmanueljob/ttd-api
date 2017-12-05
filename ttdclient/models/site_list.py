@@ -28,6 +28,7 @@ class SiteList(Base):
         
     def set_domains(self, domains):
         to_add = []
+        print self
         for domain in list(set(domains)):
             to_add.append({'Domain': domain, 'adjustment': 1.0})
         self['SiteListLines'] = to_add
