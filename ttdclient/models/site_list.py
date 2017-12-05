@@ -33,8 +33,12 @@ class SiteList(Base):
         loader = SiteList(Base.connection)
         a = loader.find('bjrc1vj')
         print a
+        for ttd_domain in a.get('SiteListLines'):
+            print ttd_domain
+        #    hits[ttd_domain['Domain']] = ttd_domain['Adjustment']
         print "END PRINTING SELF"
         for domain in list(set(domains)):
+            default_adjustment = 1.0
             to_add.append({'Domain': domain, 'adjustment': 1.0})
         self['SiteListLines'] = to_add
 
