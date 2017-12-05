@@ -28,23 +28,18 @@ class SiteList(Base):
         
     def set_domains(self, domains):
         to_add = []
-        hits = {}
-        print "PRINTING SELF"
-        print self
+        domains_and_adjustments = {} 
+
         loader = SiteList(Base.connection)
-        a = loader.find('bjrc1vj')
-        print a
+        a = loader.find(self['SiteListId'])
+
         for ttd_domain in a.get('SiteListLines'):
-            hits[ttd_domain['Domain']] = ttd_domain['Adjustment']
-        print hits
-        print "END PRINTING SELF"
+            domains_and_adjustments[ttd_domain['Domain']] = ttd_domain['Adjustment']
+
         for domain in list(set(domains)):
             the_adjustment = 1.0
-            print "Searching for domain:"
-            print domain
-            if hits.has_key(domain):
-                print "Domain found in dictionary"
-                the_adjustment = hits[domain]
+            if domains_and_adjustments.has_key(domain):
+                the_adjustment = domains_and_adjustments[domain]
             to_add.append({'Domain': domain, 'adjustment': the_adjustment})
         self['SiteListLines'] = to_add
 
