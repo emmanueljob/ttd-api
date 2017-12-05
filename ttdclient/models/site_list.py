@@ -30,7 +30,11 @@ class SiteList(Base):
         to_add = []
         print "PRINTING SELF"
         print self
+        loader = SiteList(Base.connection)
+        a = loader.find('bjrc1vj')
+        print a
         print "END PRINTING SELF"
         for domain in list(set(domains)):
             to_add.append({'Domain': domain, 'adjustment': 1.0})
         self['SiteListLines'] = to_add
+
