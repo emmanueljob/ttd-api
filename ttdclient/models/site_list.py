@@ -40,6 +40,11 @@ class SiteList(Base):
         print "END PRINTING SELF"
         for domain in list(set(domains)):
             default_adjustment = 1.0
+            print "Searching for domain:"
+            print domain
+            if hits.has_key(domain):
+                print "Domain found in dictionary"
+                default_adjustment = hits[domain]
             to_add.append({'Domain': domain, 'adjustment': 1.0})
         self['SiteListLines'] = to_add
 
