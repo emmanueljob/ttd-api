@@ -31,6 +31,7 @@ class SiteList(Base):
         domains_and_adjustments = {} 
 
         loader = SiteList(Base.connection)
+        print self
         a = loader.find(self['SiteListId'])
 
         for ttd_domain in a.get('SiteListLines'):
