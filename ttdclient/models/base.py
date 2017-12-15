@@ -1,5 +1,7 @@
+import logging
 import json
 import requests
+import datetime
 
 
 class Base(dict):
@@ -10,6 +12,7 @@ class Base(dict):
     obj_name = None
 
     def __init__(self, connection):
+        self.logger = logging.getLogger("ttd-api")
         Base.connection = connection
         super(Base, self).__init__()
 
@@ -70,19 +73,28 @@ class Base(dict):
 
         headers['Content-Type'] = 'application/json'
 
+        start_time = datetime.datetime.now()
+        curl_command = ""
+        rval = None
         if method == "GET":
-            print "curl -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
-            return requests.get(url, headers=headers, data=payload)
+            curl_command = "curl -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.get(url, headers=headers, data=payload)
         elif method == "POST":
-            print "curl -XPOST -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
-            return requests.post(url, headers=headers, data=payload)
+            curl_command = "curl -XPOST -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.post(url, headers=headers, data=payload)
         elif method == "PUT":
-            print "curl -XPUT -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
-            return requests.put(url, headers=headers, data=payload)
+            curl_command = "curl -XPUT -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.put(url, headers=headers, data=payload)
         elif method == "DELETE":
-            return requests.delete(url, headers=headers)
+            curl_command = "curl -XDELETE -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.delete(url, headers=headers)
         else:
             raise Exception("Unknown method")
+        
+        end_time = datetime.datetime.now()
+        total_time = end_time - start_time
+        self.logger.debug("{0}, \"{1}\"".format(str(total_time), curl_command.replace('"', '""')))
+        return rval
 
     def _get_response_objects(self, response):
         rval = []
@@ -95,6 +107,7 @@ class Base(dict):
                 rval.append(new_obj)
         else:
             print response.text
+            self.logger.error("-1, \"{0}\"".format(response.text))
             raise Exception("Bad response code {0}".format(response.text))
 
         return rval
@@ -107,6 +120,7 @@ class Base(dict):
             new_obj.import_props(obj)
         else:
             print response.text
+            self.logger.error("-1, \"{0}\"".format(response.text))
             raise Exception("Bad response code {0}".format(response.text))
 
         return new_obj
