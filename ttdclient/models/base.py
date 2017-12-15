@@ -107,7 +107,7 @@ class Base(dict):
                 rval.append(new_obj)
         else:
             print response.text
-            self.logger.error("-1, \"{1}\"".format(response.text)
+            self.logger.error("-1, \"{0}\"".format(response.text))
             raise Exception("Bad response code {0}".format(response.text))
 
         return rval
@@ -120,7 +120,7 @@ class Base(dict):
             new_obj.import_props(obj)
         else:
             print response.text
-            self.logger.error("-1, \"{1}\"".format(response.text)
+            self.logger.error("-1, \"{0}\"".format(response.text))
             raise Exception("Bad response code {0}".format(response.text))
 
         return new_obj
