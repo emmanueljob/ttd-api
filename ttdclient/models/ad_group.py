@@ -47,7 +47,7 @@ class AdGroup(Base):
         adjustments = self['RTBAttributes'].get('ContractTargeting', {}).get('ContractAdjustments')
 
         self['RTBAttributes']['ContractTargeting'] = { 
-            'ContractIds': deal_ids,
+            #'ContractIds': deal_ids,
             'ContractGroupIds': deal_group_ids
             }
 
@@ -55,9 +55,15 @@ class AdGroup(Base):
         if adjustments and len(adjustments) > 0:
             for adjustment in adjustments:
                 if adjustment['Id'] in deal_ids:
+                    deal_ids.remove(adjustment['Id'])
                     new_adjustments.append(adjustment)
 
-        self['RTBAttributes']['ContractTargeting']['ContractAdjustments'] = new_adjustments
+            for deal_id in deal_ids:
+                new_adjustments.append({"Adjustment": 1.0, "Id": deal_id})
+
+            self['RTBAttributes']['ContractTargeting']['ContractAdjustments'] = new_adjustments
+        else:
+            self['RTBAttributes']['ContractTargeting']['ContractIds'] = deal_ids
 
     def set_delivery_profile_adjustments(self, deal_ids=None):
 
