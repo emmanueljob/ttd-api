@@ -4,14 +4,12 @@ from ttdclient.models.base import Base
 
 class BidList(Base):
 
-    obj_name = "bidlist"
+    obj_name = "adgroup/bidlist"
 
     def getId(self):
         return self.get("BidListId")
 
     def create_bid_list(self, name, target_list='TargetList', resolution_type='SingleMatchOnly'):
-        self.obj_name = "adgroup/" + self.obj_name
-
         self['BidList'] = { 
             "Name": name,
             "BidListAdjustmentType": target_list,
@@ -26,6 +24,8 @@ class BidList(Base):
         return self._get_response_objects(response)
 
     def get_by_ad_group(self, dsp_lineitem_id):
+        self.obj_name = "bidlist"
+
         payload = { "AdGroupId": dsp_lineitem_id,
                     "PageStartIndex": 0,
                     "PageSize": None }
