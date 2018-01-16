@@ -43,11 +43,27 @@ class AdGroup(Base):
 
         if deal_group_ids is None:
             deal_group_ids = []
-            
+
+        adjustments = self['RTBAttributes'].get('ContractTargeting', {}).get('ContractAdjustments')
+
         self['RTBAttributes']['ContractTargeting'] = { 
-            'ContractIds': deal_ids,
+            #'ContractIds': deal_ids,
             'ContractGroupIds': deal_group_ids
             }
+
+        new_adjustments = []
+        if adjustments and len(adjustments) > 0:
+            for adjustment in adjustments:
+                if adjustment['Id'] in deal_ids:
+                    deal_ids.remove(adjustment['Id'])
+                    new_adjustments.append(adjustment)
+
+            for deal_id in deal_ids:
+                new_adjustments.append({"Adjustment": 1.0, "Id": deal_id})
+
+            self['RTBAttributes']['ContractTargeting']['ContractAdjustments'] = new_adjustments
+        else:
+            self['RTBAttributes']['ContractTargeting']['ContractIds'] = deal_ids
 
     def set_delivery_profile_adjustments(self, deal_ids=None):
 
@@ -136,15 +152,22 @@ class AdGroup(Base):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
             
-        self['RTBAttributes']['SupplyVendorAdjustments'] = { 
-            'DefaultAdjustment': 0.0
-            }
-        
+        self['RTBAttributes']['SupplyVendorAdjustments']['DefaultAdjustment'] = 0.0 
+    
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
 
         for id in exchange_ids:
-            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': 1.0})
+
+            # Default
+            adjustment = 1.0
+
+            # If we get a 'Bid Adjustment' from TTD, use it instead of the default
+            for x in self['RTBAttributes'].get('SupplyVendorAdjustments').get('Adjustments'):
+                if int(x.get('Id')) == int(id):
+                    adjustment = x.get('Adjustment')
+
+            self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': adjustment})
 
 
     def set_domains(self, domains):
