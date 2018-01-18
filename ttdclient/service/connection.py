@@ -29,7 +29,7 @@ class Connection:
         }
 
         headers = {'Content-Type': 'application/json'}
-        response = requests.post(auth_url, headers=headers, data=json.dumps(credentials))
+        response = requests.post(auth_url, headers=headers, data=json.dumps(credentials), verify=False)
 
         if response is not None:
             obj = json.loads(response.text)

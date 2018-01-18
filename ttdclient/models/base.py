@@ -78,16 +78,16 @@ class Base(dict):
         rval = None
         if method == "GET":
             curl_command = "curl -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{2}'".format(headers['TTD-Auth'], payload, url)
-            rval = requests.get(url, headers=headers, data=payload)
+            rval = requests.get(url, headers=headers, data=payload, verify=False)
         elif method == "POST":
             curl_command = "curl -XPOST -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
-            rval = requests.post(url, headers=headers, data=payload)
+            rval = requests.post(url, headers=headers, data=payload, verify=False)
         elif method == "PUT":
             curl_command = "curl -XPUT -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
-            rval = requests.put(url, headers=headers, data=payload)
+            rval = requests.put(url, headers=headers, data=payload, verify=False)
         elif method == "DELETE":
             curl_command = "curl -XDELETE -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{2}'".format(headers['TTD-Auth'], payload, url)
-            rval = requests.delete(url, headers=headers)
+            rval = requests.delete(url, headers=headers, verify=False)
         else:
             raise Exception("Unknown method")
         
