@@ -38,11 +38,11 @@ class SiteList(Base):
             for ttd_domain in a.get('SiteListLines'):
                 domains_and_adjustments[ttd_domain['Domain']] = ttd_domain['Adjustment']
 
-
         for domain in list(set(domains)):
             the_adjustment = 1.0
             if domains_and_adjustments.has_key(domain):
                 the_adjustment = domains_and_adjustments[domain]
             to_add.append({'Domain': domain, 'adjustment': the_adjustment})
+
         self['SiteListLines'] = to_add
 
