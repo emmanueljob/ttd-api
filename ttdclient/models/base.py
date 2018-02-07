@@ -35,11 +35,7 @@ class Base(dict):
             return rval
         else:
             response = self._execute("GET", self.get_find_url(id), None)
-
-            if response:
-                return self._get_response_object(response)
-            else:
-                return None
+            return self._get_response_object(response)
 
     def create(self):
         response = self._execute("POST", self.get_create_url(), json.dumps(self.export_props()))
@@ -49,15 +45,10 @@ class Base(dict):
     def getId(self):
         return self.get('id')
 
-    def save(self):
-        if self.getId() is None or self.getId() == 0:
-            raise Exception("cant update an object with no id")
-
-        response = self._execute("PUT", self.get_url(), json.dumps(self.export_props()))
+    def save(self, payload):
+        response = self._execute("PUT", self.get_url(), json.dumps(payload))
         obj = self._get_response_object(response)
-        self.import_props(obj)
-
-        return self.getId()
+        return obj
 
     def _execute(self, method, url, payload):
         return self._execute_no_reauth(method, url, payload)
@@ -91,20 +82,26 @@ class Base(dict):
         return rval
 
     def _get_response_objects(self, response):
-        rval = []
+        rval = {}
+        rval["response_code"] = response.status_code
         obj = json.loads(response.text)
-        if obj and 'Result' in obj:
+        if response.status_code == 200:
+            data = []
             results = obj.get('Result')
             for result in results:
-                new_obj = self.__class__(Base.connection)
-                new_obj.import_props(result)
-                rval.append(new_obj)
-        else:
-            #print response.text
-            self.logger.error("-1, \"{0}\"".format(response.text))
-            raise Exception("Bad response code {0}".format(response.text))
+                data.append(result)
 
-        return rval
+            rval["msg_type"] = "success"
+            rval["msg"] = ""
+            rval["data"] = obj
+            rval["request_body"] = ""
+        else:
+            rval["msg_type"] = "error"
+            rval["msg"] = obj.get("Message")
+            rval["data"] = obj.get("ErrorDetails")
+            rval["request_body"] = self.curl_command
+
+        return json.dumps(rval)
 
     def _get_response_object(self, response):
         rval = {}
@@ -121,7 +118,7 @@ class Base(dict):
             rval["data"] = obj.get("ErrorDetails")
             rval["request_body"] = self.curl_command
 
-        return rval
+        return json.dumps(rval)
 
     def import_props(self, props):
         for key, value in props.iteritems():
