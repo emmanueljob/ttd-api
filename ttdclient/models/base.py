@@ -11,7 +11,8 @@ class Base(dict):
     # Needs to be defined in the subclass
     obj_name = None
 
-    def __init__(self, connection):
+    def __init__(self, connection=None, data=None):
+        self.data = data
         self.logger = logging.getLogger("ttd-api")
         Base.connection = connection
         super(Base, self).__init__()

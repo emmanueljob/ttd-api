@@ -21,7 +21,6 @@ class AdGroup(Base):
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
 
-
     def get_by_name(self, campaign_id, name):
         payload = { "CampaignId": campaign_id,
                     "SearchTerms": [name],
@@ -44,7 +43,7 @@ class AdGroup(Base):
         if deal_group_ids is None:
             deal_group_ids = []
 
-        adjustments = self['RTBAttributes'].get('ContractTargeting', {}).get('ContractAdjustments')
+        adjustments = self.data['RTBAttributes'].get('ContractTargeting', {}).get('ContractAdjustments')
 
         self['RTBAttributes']['ContractTargeting'] = { 
             #'ContractIds': deal_ids,
@@ -87,18 +86,6 @@ class AdGroup(Base):
             'ContractAdjustments': [],
             "DeliveryProfileAdjustments": delivery_profile_adjustments
             }
-
-    """
-    def set_deal_groups(self, deal_group_ids):
-
-        if 'RTBAttributes' not in self:
-            self['RTBAttributes'] = {}
-            
-        self['RTBAttributes']['ContractTargeting'] = { 
-            'AllowOpenMarketBiddingWhenTargetingContracts': True,
-            'ContractGroupIds': deal_group_ids
-            }
-    """
 
     def target_exchanges(self, target=False):
 
@@ -146,13 +133,15 @@ class AdGroup(Base):
             
         return self['RTBAttributes'].get('CreativeIds', None)
 
-
     def set_exchanges(self, exchange_ids, override=True):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
-            
-        self['RTBAttributes']['SupplyVendorAdjustments']['DefaultAdjustment'] = 0.0 
+
+        if 'SupplyVendorAdjustments' not in self['RTBAttributes']:
+            self['RTBAttributes']['SupplyVendorAdjustments'] = {
+                'DefaultAdjustment': 0.0
+                }
     
         if override or 'Adjustments' not in self['RTBAttributes']['SupplyVendorAdjustments']:
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'] = []
@@ -163,12 +152,11 @@ class AdGroup(Base):
             adjustment = 1.0
 
             # If we get a 'Bid Adjustment' from TTD, use it instead of the default
-            for x in self['RTBAttributes'].get('SupplyVendorAdjustments').get('Adjustments'):
+            for x in self.data['RTBAttributes'].get('SupplyVendorAdjustments').get('Adjustments'):
                 if int(x.get('Id')) == int(id):
                     adjustment = x.get('Adjustment')
 
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': adjustment})
-
 
     def set_domains(self, domains, sitelist_id=None):
 
