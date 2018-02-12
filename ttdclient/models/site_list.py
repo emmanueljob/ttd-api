@@ -31,7 +31,6 @@ class SiteList(Base):
         domains_and_adjustments = {} 
 
         loader = SiteList(Base.connection)
-        print self
 
         if 'SiteListId' in self:
             a = loader.find(self['SiteListId'])
