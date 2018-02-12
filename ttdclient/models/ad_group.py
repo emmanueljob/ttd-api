@@ -37,6 +37,9 @@ class AdGroup(Base):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
 
+        if 'ContractTargeting' not in self['RTBAttributes']:
+            self['RTBAttributes']['ContractTargeting'] = {}
+
         if deal_ids is None:
             deal_ids = []
 
@@ -196,6 +199,7 @@ class AdGroup(Base):
             response = json.loads(sitelist.create())
         else:
             sitelist['SiteListId'] = sitelist_id
+            sitelist['SiteListName'] = self.data['AdGroupName']
             response = json.loads(sitelist.save(sitelist))
 
         if 'RTBAttributes' not in self:
