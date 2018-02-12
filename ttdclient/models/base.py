@@ -16,6 +16,17 @@ class Base(dict):
         Base.connection = connection
         super(Base, self).__init__()
 
+    def log(self, level, message):
+        rval = None
+        try:
+            # make sure we remove non-ascii chars and trim the message to 1000 chars
+            message = message.encode('ascii', 'ignore')[:1000]
+            rval = self.logger.log(level, message)
+        except:
+            pass
+
+        return rval
+
     def get_url(self):
         return "{0}/{1}".format(Base.connection.url, self.obj_name)
 
@@ -93,7 +104,7 @@ class Base(dict):
         
         end_time = datetime.datetime.now()
         total_time = end_time - start_time
-        self.logger.debug("{0}, \"{1}\"".format(str(total_time), curl_command.replace('"', '""')))
+        self.log(logging.DEBUG, "{0}, \"{1}\"".format(str(total_time), curl_command.replace('"', '""')))
         return rval
 
     def _get_response_objects(self, response):
@@ -107,7 +118,7 @@ class Base(dict):
                 rval.append(new_obj)
         else:
             print response.text
-            self.logger.error("-1, \"{0}\"".format(response.text))
+            self.log(logging.ERROR, "-1, \"{0}\"".format(response.text))
             raise Exception("Bad response code {0}".format(response.text))
 
         return rval
@@ -120,7 +131,7 @@ class Base(dict):
             new_obj.import_props(obj)
         else:
             print response.text
-            self.logger.error("-1, \"{0}\"".format(response.text))
+            self.log(logging.ERROR, "-1, \"{0}\"".format(response.text))
             raise Exception("Bad response code {0}".format(response.text))
 
         return new_obj
