@@ -9,7 +9,7 @@ class AdGroup(Base):
     obj_name = "adgroup"
 
     def getId(self):
-        return self.get("AdGroupId")
+        return self.data.get("AdGroupId")
 
     def get_by_campaign(self, campaign_id):
         payload = { "CampaignId": campaign_id,
@@ -32,7 +32,7 @@ class AdGroup(Base):
         response = self._execute(method, url, json.dumps(payload))
         return self._get_response_objects(response)
 
-    def set_deals(self, deal_ids=None, deal_group_ids=None):
+    def set_deals(self, deal_ids=None):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
@@ -40,18 +40,13 @@ class AdGroup(Base):
         if deal_ids is None:
             deal_ids = []
 
-        if deal_group_ids is None:
-            deal_group_ids = []
+        try:
+            adjustments = self.data['RTBAttributes'].get('ContractTargeting', {}).get('ContractAdjustments')
+        except:
+            adjustments = None
 
-        adjustments = self.data['RTBAttributes'].get('ContractTargeting', {}).get('ContractAdjustments')
-
-        self['RTBAttributes']['ContractTargeting'] = { 
-            #'ContractIds': deal_ids,
-            'ContractGroupIds': deal_group_ids
-            }
-
-        new_adjustments = []
         if adjustments and len(adjustments) > 0:
+            new_adjustments = []
             for adjustment in adjustments:
                 if adjustment['Id'] in deal_ids:
                     deal_ids.remove(adjustment['Id'])
@@ -63,6 +58,16 @@ class AdGroup(Base):
             self['RTBAttributes']['ContractTargeting']['ContractAdjustments'] = new_adjustments
         else:
             self['RTBAttributes']['ContractTargeting']['ContractIds'] = deal_ids
+
+    def set_contract_groups(self, deal_group_ids=None):
+
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+
+        if deal_group_ids is None:
+            deal_group_ids = []
+
+        self['RTBAttributes']['ContractTargeting']['ContractGroupIds'] = deal_group_ids
 
     def set_delivery_profile_adjustments(self, deal_ids=None):
 
@@ -79,6 +84,9 @@ class AdGroup(Base):
                 val["Adjustment"] = 1
                 delivery_profile_adjustments.append(val)
 
+        self['RTBAttributes']['ContractTargeting']['DeliveryProfileAdjustments'] = delivery_profile_adjustments
+
+        """
         self['RTBAttributes']['ContractTargeting'] = { 
             'AllowOpenMarketBiddingWhenTargetingContracts': False,
             'ContractIds': [],
@@ -86,6 +94,7 @@ class AdGroup(Base):
             'ContractAdjustments': [],
             "DeliveryProfileAdjustments": delivery_profile_adjustments
             }
+        """
 
     def target_exchanges(self, target=False):
 
@@ -162,39 +171,41 @@ class AdGroup(Base):
 
         # get the campaign so we can get the advertiserId
         loader = Campaign(Base.connection)
-        campaign = loader.find(self['CampaignId'])
+        campaign = json.loads(loader.find(self.data['CampaignId']))
 
         # get the sitelist
         loader = SiteList(Base.connection)
         if sitelist_id is not None:
-            sitelist = loader.find(sitelist_id)
+            sitelist = json.loads(loader.find(sitelist_id))
         else:
-            sitelist = loader.find_by_name(campaign['AdvertiserId'], self['AdGroupName'])
+            sitelist = json.loads(loader.find_by_name(campaign.get('data').get('AdvertiserId'), self.data['AdGroupName']))
 
-        if sitelist == None:
+        if sitelist.get('data').get('ResultCount') == 0:
             sitelist = SiteList(Base.connection)
-            sitelist['SiteListName'] = self['AdGroupName']
-            sitelist['AdvertiserId'] = campaign['AdvertiserId']
+            sitelist['SiteListName'] = self.data['AdGroupName']
+            sitelist['AdvertiserId'] = campaign.get('data').get('AdvertiserId')
+        else:
+            try:
+                sitelist_data = sitelist.get('data').get('Result')[0]
+            except:
+                sitelist_data = sitelist.get('data')
+            sitelist = SiteList(Base.connection, sitelist_data)
 
         sitelist.set_domains(domains)
         if sitelist.getId() == 0 or sitelist.getId() is None:
-            sitelist.create()
+            response = json.loads(sitelist.create())
         else:
-            sitelist.save()
+            sitelist['SiteListId'] = sitelist_id
+            response = json.loads(sitelist.save(sitelist))
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
 
         # sitelist.getId() always exists so set as default list
-        if 'SiteTargeting' in self['RTBAttributes']:
+        if 'SiteTargeting' in self.data['RTBAttributes']:
             # If Ad Group as a current list, use it and append the new ID.
-            if 'SiteListIds' in self['RTBAttributes']['SiteTargeting']:
-                currentList = self['RTBAttributes']['SiteTargeting']['SiteListIds']
-
-                # Weird error if duplicate IDs exist
-                """
-                Exception: Bad response code {"Message":"The request failed validation. Please check your request and try again.","ErrorDetails":[{"Property":"AdGroup.RTBAttributes.SiteTargeting.SiteListIds","Reasons":["The following Site Lists cannot be used for this operation because they are not accessible to Advertiser '9ut3ufp': ."]}]}
-                """
+            if 'SiteListIds' in self.data['RTBAttributes']['SiteTargeting']:
+                currentList = self.data['RTBAttributes']['SiteTargeting']['SiteListIds']
                 if sitelist.getId() not in currentList:
                     currentList.append(sitelist.getId())
         else:
