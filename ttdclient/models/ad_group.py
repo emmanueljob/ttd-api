@@ -170,15 +170,19 @@ class AdGroup(Base):
             self['RTBAttributes']['SupplyVendorAdjustments']['Adjustments'].append({'Id': id, 'Adjustment': adjustment})
 
 
-    def set_domains(self, domains):
+    def set_domains(self, domains, sitelist_id=None):
 
         # get the campaign so we can get the advertiserId
         loader = Campaign(Base.connection)
         campaign = loader.find(self['CampaignId'])
-        
+
         # get the sitelist
         loader = SiteList(Base.connection)
-        sitelist = loader.find_by_name(campaign['AdvertiserId'], self['AdGroupName'])
+        if sitelist_id is not None:
+            sitelist = loader.find(sitelist_id)
+        else:
+            sitelist = loader.find_by_name(campaign['AdvertiserId'], self['AdGroupName'])
+
         if sitelist == None:
             sitelist = SiteList(Base.connection)
             sitelist['SiteListName'] = self['AdGroupName']
@@ -221,6 +225,8 @@ class AdGroup(Base):
                 'SiteListIds': currentList,
                 'SiteListFallThroughAdjustment': 0
                 }
+
+        return sitelist.getId()
 
     def set_budget(self, budget, currency_code):
         if 'RTBAttributes' not in self:
