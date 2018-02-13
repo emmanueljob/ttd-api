@@ -242,7 +242,7 @@ class AdGroup(Base):
             self['RTBAttributes'] = {}
 
         self['RTBAttributes']['SiteTargeting'] = {
-            'SiteListIds': self.dsp_sitelist_ids,
+            'SiteListIds': sitelist_ids,
             'SiteListFallThroughAdjustment': 1
             }
 
