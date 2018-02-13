@@ -237,6 +237,15 @@ class AdGroup(Base):
 
         return sitelist.getId()
 
+    def set_site_lists(self, sitelist_ids):
+        if 'RTBAttributes' not in self:
+            self['RTBAttributes'] = {}
+
+        self['RTBAttributes']['SiteTargeting'] = {
+            'SiteListIds': self.dsp_sitelist_ids,
+            'SiteListFallThroughAdjustment': 1
+            }
+
     def set_budget(self, budget, currency_code):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
