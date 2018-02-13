@@ -84,7 +84,7 @@ class AdGroup(Base):
             self['RTBAttributes']['ContractTargeting'] = {}
 
         if deal_ids is None:
-            deal_ids = []
+            delivery_profile_adjustments = []
         else:
             delivery_profile_adjustments = []
             for deal_id in deal_ids:
