@@ -67,6 +67,9 @@ class AdGroup(Base):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
 
+        if 'ContractTargeting' not in self['RTBAttributes']:
+            self['RTBAttributes']['ContractTargeting'] = {}
+
         if deal_group_ids is None:
             deal_group_ids = []
 
@@ -76,6 +79,9 @@ class AdGroup(Base):
 
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
+
+        if 'ContractTargeting' not in self['RTBAttributes']:
+            self['RTBAttributes']['ContractTargeting'] = {}
 
         if deal_ids is None:
             deal_ids = []
