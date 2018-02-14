@@ -233,8 +233,7 @@ class AdGroup(Base):
                 'SiteListFallThroughAdjustment': 0
                 }
 
-        #return response.get('data').get('SiteListId')
-        return self._get_response_object(response)
+        return response
 
     def set_site_lists(self, sitelist_ids):
         if 'RTBAttributes' not in self:
