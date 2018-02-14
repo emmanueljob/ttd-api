@@ -8,7 +8,10 @@ class SiteList(Base):
     obj_name = "sitelist"
 
     def getId(self):
-        return self.data.get("SiteListId")
+        if self.data:
+            return self.data.get("SiteListId")
+        else:
+            return None
 
     def find_by_name(self, advertiser_id, name):
         payload = { "AdvertiserId": advertiser_id,

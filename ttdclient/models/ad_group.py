@@ -193,19 +193,17 @@ class AdGroup(Base):
             sitelist = SiteList(Base.connection)
             sitelist['SiteListName'] = self.data['AdGroupName']
             sitelist['AdvertiserId'] = campaign.get('data').get('AdvertiserId')
+            sitelist.set_domains(domains)
+            response = json.loads(sitelist.create())
         else:
             try:
                 sitelist_data = sitelist.get('data').get('Result')[0]
             except:
                 sitelist_data = sitelist.get('data')
             sitelist = SiteList(Base.connection, sitelist_data)
-
-        sitelist.set_domains(domains)
-        if sitelist.getId() == 0 or sitelist.getId() is None:
-            response = json.loads(sitelist.create())
-        else:
-            sitelist['SiteListId'] = sitelist_id
-            sitelist['SiteListName'] = self.data['AdGroupName']
+            sitelist.set_domains(domains)
+            sitelist['SiteListId'] = sitelist_data.get('SiteListId')
+            sitelist['SiteListName'] = self.data['AdGroupName'][:255]
             response = json.loads(sitelist.save(sitelist))
 
         if 'RTBAttributes' not in self:
@@ -235,7 +233,8 @@ class AdGroup(Base):
                 'SiteListFallThroughAdjustment': 0
                 }
 
-        return sitelist.getId()
+        #return response.get('data').get('SiteListId')
+        return self._get_response_object(response)
 
     def set_site_lists(self, sitelist_ids):
         if 'RTBAttributes' not in self:
