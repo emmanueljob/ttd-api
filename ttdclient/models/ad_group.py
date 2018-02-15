@@ -217,10 +217,12 @@ class AdGroup(Base):
                 if sitelist.getId() not in currentList:
                     currentList.append(sitelist.getId())
         else:
-            currentList = [sitelist.getId()]
+            #currentList = [sitelist.getId()]
+            currentList = [response.get('data').get('SiteListId')]
 
         if len(domains) == 0 and sitelist.getId() in currentList:
-            currentList.remove(sitelist.getId())
+            #currentList.remove(sitelist.getId())
+            currentList.remove(response.get('data').get('SiteListId'))
 
         if len(currentList) == 0:
             self['RTBAttributes']['SiteTargeting'] = {
