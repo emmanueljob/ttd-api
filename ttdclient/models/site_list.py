@@ -33,10 +33,11 @@ class SiteList(Base):
 
         loader = SiteList(Base.connection)
 
-        if 'SiteListId' in self.data:
-            a = json.loads(loader.find(self.data['SiteListId']))
-            for ttd_domain in a.get('data').get('SiteListLines'):
-                domains_and_adjustments[ttd_domain['Domain']] = ttd_domain['Adjustment']
+        if self.data is not None:
+            if 'SiteListId' in self.data:
+                a = json.loads(loader.find(self.data['SiteListId']))
+                for ttd_domain in a.get('data').get('SiteListLines'):
+                    domains_and_adjustments[ttd_domain['Domain']] = ttd_domain['Adjustment']
 
         for domain in list(set(domains)):
             the_adjustment = 1.0

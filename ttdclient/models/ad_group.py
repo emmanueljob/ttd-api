@@ -241,8 +241,12 @@ class AdGroup(Base):
         if 'RTBAttributes' not in self:
             self['RTBAttributes'] = {}
 
+        site_lists = []
+        for id in sitelist_ids:
+            site_lists.append(str(id))
+
         self['RTBAttributes']['SiteTargeting'] = {
-            'SiteListIds': sitelist_ids,
+            'SiteListIds': site_lists,
             'SiteListFallThroughAdjustment': 1
             }
 
