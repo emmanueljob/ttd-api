@@ -8,7 +8,10 @@ class SiteList(Base):
     obj_name = "sitelist"
 
     def getId(self):
-        return self.get("SiteListId")
+        if self.data:
+            return self.data.get("SiteListId")
+        else:
+            return None
 
     def find_by_name(self, advertiser_id, name):
         payload = { "AdvertiserId": advertiser_id,
@@ -22,9 +25,7 @@ class SiteList(Base):
         response = self._execute(method, url, json.dumps(payload))
         objects = self._get_response_objects(response)
 
-        if len(objects) > 0:
-            return objects[0]
-        return None
+        return objects
         
     def set_domains(self, domains):
         to_add = []
@@ -32,10 +33,11 @@ class SiteList(Base):
 
         loader = SiteList(Base.connection)
 
-        if 'SiteListId' in self:
-            a = loader.find(self['SiteListId'])
-            for ttd_domain in a.get('SiteListLines'):
-                domains_and_adjustments[ttd_domain['Domain']] = ttd_domain['Adjustment']
+        if self.data is not None:
+            if 'SiteListId' in self.data:
+                a = json.loads(loader.find(self.data['SiteListId']))
+                for ttd_domain in a.get('data').get('SiteListLines'):
+                    domains_and_adjustments[ttd_domain['Domain']] = ttd_domain['Adjustment']
 
         for domain in list(set(domains)):
             the_adjustment = 1.0
@@ -44,4 +46,5 @@ class SiteList(Base):
             to_add.append({'Domain': domain, 'adjustment': the_adjustment})
 
         self['SiteListLines'] = to_add
+        return to_add
 

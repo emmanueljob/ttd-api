@@ -32,7 +32,7 @@ class Creative(Base):
         width = 0
         height = 0
         for attribute in attributes:
-            fields = self.get(attribute, None)
+            fields = self.data.get(attribute, None)
             if not fields:
                 continue
 
