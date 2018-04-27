@@ -90,7 +90,7 @@ class Base(dict):
         
         end_time = datetime.datetime.now()
         total_time = end_time - start_time
-        self.log(logging.DEBUG, "{0}, \"{1}\"".format(str(total_time), curl_command.replace('"', '""')))
+        self.log(logging.DEBUG, "{0}, \"{1}\"".format(str(total_time), self.curl_command.replace('"', '""')))
 
         return rval
 
