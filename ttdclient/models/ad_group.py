@@ -247,7 +247,7 @@ class AdGroup(Base):
 
         self['RTBAttributes']['SiteTargeting'] = {
             'SiteListIds': site_lists,
-            'SiteListFallThroughAdjustment': 1
+            'SiteListFallThroughAdjustment': 0
             }
 
     def set_budget(self, budget, currency_code):
