@@ -57,38 +57,26 @@ class Base(dict):
     def getId(self):
         return self.get('id')
 
+    """
     def save(self, payload):
         response = self._execute("PUT", self.get_url(), json.dumps(payload))
         obj = self._get_response_object(response)
         return obj
-
     """
+
     def save(self, payload):
         try:
             response = self._execute("PUT", self.get_url(), json.dumps(payload))
             obj = self._get_response_object(response)
         except Exception, e:
-            print ""
-            print ""
-            print ""
-            print ""
-            print ""
-            print e
-            print "---------------------------"
-            print payload
-            print ""
-            print ""
-            print ""
-            print ""
             obj = {}
             obj["msg_type"] = "error"
             obj["msg"] = "TTD fatal error"
             obj["data"] = str(e)
-            obj["request_body"] = self.curl_command
+            obj["request_body"] = payload
             obj = json.dumps(obj)
 
         return obj
-    """
 
     def _execute(self, method, url, payload):
         return self._execute_no_reauth(method, url, payload)
@@ -103,32 +91,18 @@ class Base(dict):
         rval = None
         if method == "GET":
             self.curl_command = "curl -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.get(url, headers=headers, data=payload, verify=False)
         elif method == "POST":
             self.curl_command = "curl -XPOST -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.post(url, headers=headers, data=payload, verify=False)
         elif method == "PUT":
             self.curl_command = "curl -XPUT -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' -d '{1}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.put(url, headers=headers, data=payload, verify=False)
         elif method == "DELETE":
             self.curl_command = "curl -XDELETE -H 'Content-Type: application/json' -H 'TTD-Auth: {0}' '{2}'".format(headers['TTD-Auth'], payload, url)
+            rval = requests.delete(url, headers=headers, verify=False)
         else:
             raise Exception("Unknown method")
-
-        try:
-            if method == "GET":
-                rval = requests.get(url, headers=headers, data=payload, verify=False)
-            elif method == "POST":
-                rval = requests.post(url, headers=headers, data=payload, verify=False)
-            elif method == "PUT":
-                rval = requests.put(url, headers=headers, data=payload, verify=False)
-            elif method == "DELETE":
-                rval = requests.delete(url, headers=headers, verify=False)
-            else:
-                raise Exception("Unknown method")
-        except Exception, e:
-            rval = {}
-            rval["msg_type"] = "error"
-            rval["msg"] = "TTD fatal error"
-            rval["data"] = str(e)
-            rval["request_body"] = self.curl_command
         
         end_time = datetime.datetime.now()
         total_time = end_time - start_time
