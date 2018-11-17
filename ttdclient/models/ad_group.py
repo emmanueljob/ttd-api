@@ -265,11 +265,7 @@ class AdGroup(Base):
     def set_bid_list(self, bidlist_id, adgroup_id):
         payload = { 
             "AdGroupId": adgroup_id,
-            "AssociatedBidLists": [
-                "BidList": {
-                    "BidListId": bidlist_id
-                }
-            ]
+            "AssociatedBidLists": [{"BidListId": bidlist_id}]
         }
         method = "PUT"
         url = '{0}/{1}'.format(self.get_url(), 'bidlist')
