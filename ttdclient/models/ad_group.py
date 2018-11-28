@@ -262,16 +262,19 @@ class AdGroup(Base):
         
         self['RTBAttributes']['BudgetSettings']['Budget']['Amount'] = budget
 
-    def set_bid_list(self, bidlist_id, adgroup_id):
+    def set_bid_list(self, bidlist_ids, adgroup_id):
         payload = { 
             "AdGroupId": adgroup_id,
-            "AssociatedBidLists": [{"BidListId": bidlist_id}]
+            "AssociatedBidLists": []
         }
+        for bidlist_id in bidlist_ids:
+            payload['AssociatedBidLists'].append({"BidListId": bidlist_id})
+
         method = "PUT"
         url = '{0}/{1}'.format(self.get_url(), 'bidlist')
 
         response = self._execute(method, url, json.dumps(payload))
-        return self._get_response_objects(response)
+        return self._get_response_object(response)
 
     def get_bid_lists(self):
         method = "GET"
