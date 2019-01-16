@@ -268,7 +268,7 @@ class AdGroup(Base):
             "AssociatedBidLists": []
         }
         for bidlist_id in bidlist_ids:
-            payload['AssociatedBidLists'].append({"BidListId": bidlist_id})
+            payload['AssociatedBidLists'].append({"BidListId": bidlist_id, "IsEnabled": True})
 
         method = "PUT"
         url = '{0}/{1}'.format(self.get_url(), 'bidlist')
