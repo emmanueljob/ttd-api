@@ -94,7 +94,7 @@ class Base(dict):
             elif method == "DELETE":
                 rval = requests.delete(url, headers=headers, verify=False)
 
-        except Exception, e:
+        except Exception as e:
             rval = {}
             rval["msg_type"] = "error"
             rval["msg"] = "TTD fatal error"
