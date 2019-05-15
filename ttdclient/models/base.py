@@ -154,13 +154,13 @@ class Base(dict):
         return json.dumps(rval)
 
     def import_props(self, props):
-        for key, value in props.iteritems():
+        for key, value in props.items():
             self[key] = value
 
     def export_props(self):
         rval = {}
         # do this an obvious way because using __dict__ gives us params we dont need.
-        for key, value in self.iteritems():
+        for key, value in self.items():
             rval[key] = value
 
         return rval

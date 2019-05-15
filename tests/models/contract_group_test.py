@@ -35,7 +35,7 @@ class ContractGroupTest(Base):
         contract_group = ContractGroup(ContractGroupTest.conn)
         contract_group = contract_group.find_by_id(contractGroupId)
 
-        print contract_group.get('ContractGroupId')
+        print(contract_group.get('ContractGroupId'))
 
         assert contract_group.get('ContractGroupId') is not None
 
@@ -49,6 +49,6 @@ class ContractGroupTest(Base):
         for c in contract_groups:
             for deal in c['ContractIds']:
                 i = i + 1
-                print str(i) + ": " + c['ContractGroupId'] + " == " + deal
+                print(str(i) + ": " + c['ContractGroupId'] + " == " + deal)
         
         
