@@ -49,6 +49,6 @@ class ContractTest(Base):
         for c in contracts:
             for deal in c['Deals']:
                 i = i + 1
-                print str(i) + ": " + c['ContractId'] + " == " + deal['SupplyVendorDealCode']
+                print(str(i) + ": " + c['ContractId'] + " == " + deal['SupplyVendorDealCode'])
         
         

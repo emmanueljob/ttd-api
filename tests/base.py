@@ -7,7 +7,10 @@ from ttdclient.service.connection import Connection
 class Base(unittest.TestCase):
 
     conn = None
-
+    partner_id = 'acjf93j'
+    adv_id = 'gksjwsb'
+    campaign_id = 'hdguo8qk'
+    
     def __init__(self, *args, **kwargs):
 
         props = Properties("test")
