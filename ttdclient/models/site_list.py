@@ -41,7 +41,7 @@ class SiteList(Base):
 
         for domain in list(set(domains)):
             the_adjustment = 1.0
-            if domains_and_adjustments.has_key(domain):
+            if domain in domains_and_adjustments:
                 the_adjustment = domains_and_adjustments[domain]
             to_add.append({'Domain': domain, 'adjustment': the_adjustment})
 
